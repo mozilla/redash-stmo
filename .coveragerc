@@ -1,0 +1,7 @@
+[run]
+source = redash_stmo
+branch = True
+
+[report]
+omit =
+    tests/*
