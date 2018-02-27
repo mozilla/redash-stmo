@@ -8,7 +8,7 @@ setup(
     },
     setup_requires=['setuptools_scm'],
     install_requires=[
-        'python-dockerflow>=2018.2.0',
+        'dockerflow>=2018.2.0',
     ],
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
