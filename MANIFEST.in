@@ -1,2 +1,1 @@
-recursive-include tests *
-include pytest.ini AUTHORS.rst README.rst tox.ini .coveragerc
+include AUTHORS.rst CHANGELOG.rst README.rst
