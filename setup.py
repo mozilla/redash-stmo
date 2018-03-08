@@ -9,6 +9,7 @@ setup(
     setup_requires=['setuptools_scm'],
     install_requires=[
         'dockerflow>=2018.2.0',
+        'requests',
     ],
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
