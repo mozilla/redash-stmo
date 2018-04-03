@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2018.4.0
+--------
+
+:date: 2018-04-03
+
+Updated python-dockerflow to 2018.4.0 to fix a
+backward-compatibility issue with a dependency.
+
 2018.3.0
 --------
 
