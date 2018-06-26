@@ -9,4 +9,5 @@ docs/_build
 build
 dist
 *.pyc
+.DS_Store
 .pytest_cache/
