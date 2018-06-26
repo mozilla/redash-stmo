@@ -1,0 +1,42 @@
+#!/bin/bash
+set -e
+
+server() {
+  exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
+}
+
+create_db() {
+  exec /app/manage.py database create_tables
+}
+
+tests() {
+  export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
+
+  if [ $# -eq 0 ]; then
+    TEST_ARGS=tests/extension_tests
+  else
+    TEST_ARGS=$@
+  fi
+  exec pytest $TEST_ARGS
+}
+
+case "$1" in
+  tests)
+    shift
+    tests $@
+;;
+  create_db)
+    create_db
+;;
+  manage)
+    shift
+	exec /app/manage.py $*
+;;
+  server)
+    shift
+    server $@
+;;
+  *)
+    exec "$@"
+;;
+esac

@@ -1,0 +1,43 @@
+version: '3'
+services:
+  server:
+    build: .
+    command: server
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - "./src/redash_stmo:/usr/local/lib/python2.7/dist-packages/redash_stmo"
+      - "./tests:/app/tests/extension_tests"
+      - "./bin:/app/bin"
+    ports:
+      - "5000:5000"
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_GOOGLE_CLIENT_ID: "dummy"
+      REDASH_GOOGLE_CLIENT_SECRET: "dummy"
+    restart: always
+  worker:
+    image: redash/redash:latest
+    command: scheduler
+    depends_on:
+      - server
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      QUEUES: "queries,scheduled_queries,celery"
+      WORKERS_COUNT: 2
+  redis:
+    image: redis:3.0-alpine
+    restart: unless-stopped
+  postgres:
+    image: postgres:9.5.6-alpine
+    command: "postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF"
+    restart: unless-stopped
+volumes:
+  server:
