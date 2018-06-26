@@ -1,0 +1,29 @@
+language: python
+python:
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+services:
+  - docker
+  - redis
+cache: pip
+install:
+  - pip install --upgrade pip setuptools wheel
+script:
+  - docker-compose build
+  - docker-compose up --no-start
+  - docker-compose start postgres
+  - docker-compose run --rm server sh -c "/app/bin/wait-for-it.sh postgres:5432 -- python manage.py database create_tables"
+  - docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;"
+  - docker-compose run server tests
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: pypi
+  user: emtwo
+  password:
+    secure: gTJ7383nAUG0OgXqrQMSc5o9HdCqmqGRqZrz1v1E4FQq+CK3Wz5HGHSBbk6eYLYq86078fBhcxESM05A4h+pq1zW08cKPmraHJm0jtew8bn/qUYE+ML9hsFc7DQsuL+0ft2ZdYJxOyH3PAS7OKg6iG9+cvU3vzpMBV0GFVJLhb7N8XVY4KOe7Muok/C2vpAiTiSy52VssjjyZFB6zdAcx8rMwbNP3hxXs8dXnaXkje4lpTIz4z5BRYaOHgLpFhZ6GEwK8cHXwJAUj9gX1be7iHzXULKQaTgjcdtmXcIKvuU8zN72TgDBoFq6GnmyUpIeJZ9oBF7jdYN1UOQf+D1rUef4ZEmqNtMk+3wD4eASH4xZ6qnqeRWWQ+RPpLjBa2oKu1j4ii3+WmB9PJtB+VzJeQH0Z92clBiVdXagmYtbH7MOXDy4icoELJ+vbA7Ww2rGj/tbBWRP/nE72nHPrk2mc3W7uKRk7V36zINZOF9t5hUHAB8FvpVzVlwpP6VsX/cDVm7hNxdUxNa43WfsljewNN6fe6wF/KLQjU+UjELKzgmGY9ircBnOnMGzv48DtyZ7Caq6IG/NRl/UDvN8ZYwIlswgUAuQ4PrSRSplukglyYnwlg+7KygUlmSeZWpLRADBOa/dkUEZFyYG71iNURCEcwzh3NVWaNTv+JKQzyfAccY=
+  on:
+    tags: true
+    repo: mozilla/redash-stmo
