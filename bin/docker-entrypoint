@@ -13,7 +13,7 @@ tests() {
   export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
 
   if [ $# -eq 0 ]; then
-    TEST_ARGS=tests/extension_tests
+    TEST_ARGS=/redash-stmo
   else
     TEST_ARGS=$@
   fi
@@ -22,21 +22,22 @@ tests() {
 
 case "$1" in
   tests)
-    shift
-    tests $@
+	shift
+	tests $@
 ;;
   create_db)
-    create_db
+	shift
+	create_db
 ;;
   manage)
-    shift
+	shift
 	exec /app/manage.py $*
 ;;
   server)
-    shift
-    server $@
+	shift
+	server $@
 ;;
   *)
-    exec "$@"
+	exec "$@"
 ;;
 esac

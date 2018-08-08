@@ -1,21 +1,26 @@
+import os
 import json
 import mock
+
 from tests import BaseTestCase
+from flask import Flask
 
 from redash import redis_connection
-from redash_stmo.datasource_health.health import update_health_status, health_status, task_info
+from redash_stmo.health import store_health_status, update_health_status, datasource_health
+
 
 
 class TestHealthStatus(BaseTestCase):
     def setUp(self):
         super(TestHealthStatus, self).setUp()
-        self.patched_custom_queries = self._setup_mock('redash_stmo.datasource_health.health.settings')
-        self.patched_updated_health_status = self._setup_mock('redash_stmo.datasource_health.health.update_health_status')
+        self.patched_store_health_status = self._setup_mock('redash_stmo.health.store_health_status')
         self.patched_run_query = self._setup_mock('redash.query_runner.pg.PostgreSQL.run_query')
 
         self.patched_run_query.return_value = ("some_data", None)
-        self.patched_custom_queries.CUSTOM_HEALTH_QUERIES = ""
-        task_info()
+        os.environ["REDASH_CUSTOM_HEALTH_QUERIES_1"] = ""
+
+        app = Flask("test")
+        datasource_health(app)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)
@@ -23,7 +28,7 @@ class TestHealthStatus(BaseTestCase):
         self.addCleanup(patcher.stop)
         return patched_function
 
-    def test_update_health_status_sets_correct_keys(self):
+    def test_store_health_status_sets_correct_keys(self):
         current_health = redis_connection.get('data_sources:health')
         self.assertEqual(None, current_health)
 
@@ -32,8 +37,8 @@ class TestHealthStatus(BaseTestCase):
         QUERY_FAIL = "SELECT meep"
         SOME_DATA_FAIL = {"a": "b", "foo": "bar", "status": "FAIL"}
         SOME_DATA_SUCCESS = {"a": "b", "foo": "bar", "status": "SUCCESS"}
-        update_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_FAIL, SOME_DATA_FAIL)
-        update_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_SUCCESS, SOME_DATA_SUCCESS)
+        store_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_FAIL, SOME_DATA_FAIL)
+        store_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_SUCCESS, SOME_DATA_SUCCESS)
 
         '''
           The expected format of the cached health data is:
@@ -50,6 +55,7 @@ class TestHealthStatus(BaseTestCase):
             ...
           }
         '''
+
         current_health = json.loads(redis_connection.get('data_sources:health'))
 
         # There is 1 data source.
@@ -76,13 +82,13 @@ class TestHealthStatus(BaseTestCase):
         for i in range(5):
             data_sources.append(self.factory.create_data_source())
 
-        health_status()
+        update_health_status()
 
         # Status is updated for each of the 5 data sources
-        self.assertEqual(self.patched_updated_health_status.call_count, 5)
+        self.assertEqual(self.patched_store_health_status.call_count, 5)
 
         # The data source name and id is correctly passed in the last call of update_health_status()
-        args, kwargs = self.patched_updated_health_status.call_args
+        args, kwargs = self.patched_store_health_status.call_args
         self.assertEqual(str(data_sources[-1].id), args[0])
         self.assertEqual(data_sources[-1].name, args[1])
 
@@ -96,6 +102,18 @@ class TestHealthStatus(BaseTestCase):
         for key in EXPECTED_KEYS[1:]:
             self.assertIsNotNone(NEW_STATUS[key])
 
+    def test_health_status_run_query_throws_noop_not_implemented_exception(self):
+        data_source = self.factory.create_data_source()
+
+        def exception_raiser(*args, **kwargs):
+          raise NotImplementedError
+
+        self.patched_run_query.side_effect = exception_raiser
+        update_health_status()
+
+        # Status is updated for the one data source
+        self.assertEqual(self.patched_store_health_status.call_count, 0)
+
     def test_health_status_run_query_throws_exception(self):
         data_source = self.factory.create_data_source()
 
@@ -103,13 +121,13 @@ class TestHealthStatus(BaseTestCase):
           raise Exception
 
         self.patched_run_query.side_effect = exception_raiser
-        health_status()
+        update_health_status()
 
         # Status is updated for the one data source
-        self.assertEqual(self.patched_updated_health_status.call_count, 1)
+        self.assertEqual(self.patched_store_health_status.call_count, 1)
 
         # The data source name is correctly passed in the last call of update_health_status()
-        args, kwargs = self.patched_updated_health_status.call_args
+        args, kwargs = self.patched_store_health_status.call_args
         self.assertEqual(str(data_source.id), args[0])
         self.assertEqual(data_source.name, args[1])
         self.assertEqual(data_source.query_runner.noop_query, args[2])
@@ -128,10 +146,10 @@ class TestHealthStatus(BaseTestCase):
     def test_health_status_custom_query(self):
         CUSTOM_QUERY = "select * from table"
         data_source = self.factory.create_data_source()
-        self.patched_custom_queries.CUSTOM_HEALTH_QUERIES = {"1": CUSTOM_QUERY}
+        os.environ["REDASH_CUSTOM_HEALTH_QUERIES_1"] = CUSTOM_QUERY
 
-        health_status()
+        update_health_status()
 
-        args, kwargs = self.patched_updated_health_status.call_args
+        args, kwargs = self.patched_store_health_status.call_args
         self.assertNotEqual(data_source.query_runner.noop_query, args[2])
         self.assertEqual(CUSTOM_QUERY, args[2])
