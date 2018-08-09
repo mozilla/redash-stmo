@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2018.8.0
+--------
+
+:data: 2018-08-09
+
+* Add docker integration for running tests
+* Add travis CI integration
+* Add datasource health extension and tests
+
 2018.4.0
 --------
 
