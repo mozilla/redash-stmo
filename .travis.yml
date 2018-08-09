@@ -6,26 +6,26 @@ python:
 - '3.5'
 - '3.6'
 services:
-  - docker
-  - redis
+- docker
+- redis
 cache: pip
 install:
-  - pip install --upgrade pip setuptools wheel
+- pip install --upgrade pip setuptools wheel
 script:
-  - docker-compose build
-  - docker-compose up --no-start
-  - docker-compose start postgres
-  - docker-compose run --rm server sh -c "/redash-stmo/bin/wait-for-it.sh postgres:5432 -- python manage.py database create_tables"
-  - docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;"
-  - docker-compose run server tests
+- docker-compose build
+- docker-compose up --no-start
+- docker-compose start postgres
+- docker-compose run --rm server sh -c "/redash-stmo/bin/wait-for-it.sh postgres:5432 -- python manage.py database create_tables"
+- docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;"
+- docker-compose run server tests
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: pypi
   user: emtwo
   distributions: sdist bdist_wheel
   password:
-    secure: so1O847pZ9Szkgyx7QbpPwM7573OYzjoWqUmgUmi2mckVUiZqlg7XkhVoFugObvj8NagO6M9/UUD3SqzGkwxK2z+Kvt0l1SFlIlyT89PoVOZiVLAPJSoqJFSKdvosERDymuD4wwyh6qKyBEfZtn76Q8v8UpMHnGL06Qr4YM6fOLjjpVYHqX2Xi0X6m6P+klVR6qFcW84afKuLZHy1aX0+tcRyXTe7Skvq+rl5U9wkPjVXUrgC4miLmg6y3uFFtzIbLWsrO/lyyx6Mmx7JUri0TtTA0J3ueBoLn06kYvIFQ/yoAOCpS51cc9MN08xwwMEB5fr91t5GujZDPLBVcSI6eyO2KfAYOs0h++DqMqJ7BNQAzqvWmahekkWqpW+K9IuOp6DG79U090aFX+wp4d69u12pXFcuTgReUDqBPilt8kbf8gcjfOSxB0M4xwt7djow93ATXQLCm2+J7jgUyvaVRn1Lld+zm+RrbB/GHPRvWQjKQe5Z83Zm9XL7VwVVq0pX4i0NEQSum9MMqRJFeuSSim82hFjElt14ZjtH/MuJpTiyu5T9SF4wA8rciRtDXsxcnj4Gm3jmTz3CRMXPVSSRgqmDusmjv+h5gBTSjhO1Rw95NJ2hoWHpe8wDw5Qq0E9h4z+k+wAX+KoL/FlFGJSscazjP1pezai3YKunczHx1I=
+    secure: t+gT1RLpn7k4yVD+uU4QRVXOssjh7kih6VAgpj/WPi/uWAEJ2CEj6SwXQhAKzuvtbGglkAiCL7wsWqUNFzmRmTRMnxZwrVESXpuqGjc44jBV/JHGbuFlzY+ycJl7xW3rt/JXydw4O50F/0IuIf+1M6VmosLd0HZw5Sny92DTZm7AHyJbS8vtJEFoewP2J4XmGT6h1Ldq0l/tXyGdzJWo3xKltxewwYnGuksyTOR9c4fmg6TiA1EVXNA6QdJGIZR8SbO0y6ZJ+Y1+RVYzmFSCDPku5SD8cQDGs3xcFu048DqEuWITP2wGmSfsHX9U1LqCkRDPFjNM2JGpOOiEx7mGe8Vyx72RPS4sfpKgkvLZxBFZWlqj8miPkaqPNCAgaOOeMw6fgOa28jGLkU/svFSQdv4RB1dFrrvwoDPBlNKvmzOtJX4Pc3vJ14rFa8KhxF3aBzdTGFQU7KoPhIOA5qRmZwbdHbdWN5NSODJOVcXkR0GBe86PcL6g9SHPM7pENOvVns/nXbmBtChuYRFJ5s8hCWLTiUKfHgqN6l4c8Tueg+0yrLzz+vzkj9e5s/FxxFpjuU9VNbes0uvZPEKc4lSAi6awZBmjfZhppnyhFEeYYfgacqIIt/cme4LpamyU3ck9zmJZnKC+/r4qVAaLRUWPfSAk9a+U/QAMSJeumiW0E0U=
   on:
     tags: true
     repo: mozilla/redash-stmo
