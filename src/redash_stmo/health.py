@@ -103,6 +103,6 @@ def datasource_health(app=None):
         app.periodic_tasks = {}
 
     app.periodic_tasks['update_health_status'] = {
-        'signature': update_health_status.s(),
+        'sig': update_health_status.s(),
         'schedule': settings.HEALTH_QUERIES_REFRESH_SCHEDULE,
     }
