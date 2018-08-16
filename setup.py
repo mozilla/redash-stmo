@@ -21,7 +21,8 @@ setup(
     entry_points={
         'redash.extensions': [
             'dockerflow = redash_stmo.dockerflow:dockerflow',
-            'datasource_health = redash_stmo.health:datasource_health'
+            'datasource_health = redash_stmo.health:datasource_health',
+            'api_endpoint = redash_stmo.api_endpoint:api_endpoint'
         ],
     },
     classifiers=[
