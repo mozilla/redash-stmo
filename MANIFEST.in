@@ -1,1 +1,2 @@
 include AUTHORS.rst CHANGELOG.rst README.rst
+recursive-include src/redash_stmo *.html *.js

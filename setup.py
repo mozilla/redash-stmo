@@ -13,6 +13,7 @@ setup(
     ],
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
+    include_package_data=True,
     description="Extensions to Redash by Mozilla",
     author='Mozilla Foundation',
     author_email='dev-webdev@lists.mozilla.org',
@@ -21,7 +22,8 @@ setup(
     entry_points={
         'redash.extensions': [
             'dockerflow = redash_stmo.dockerflow:dockerflow',
-            'datasource_health = redash_stmo.health:datasource_health'
+            'datasource_health = redash_stmo.health:datasource_health',
+            'datasource_link = redash_stmo.datasource_link:datasource_link'
         ],
     },
     classifiers=[
