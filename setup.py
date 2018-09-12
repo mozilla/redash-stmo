@@ -23,7 +23,8 @@ setup(
         'redash.extensions': [
             'dockerflow = redash_stmo.dockerflow:dockerflow',
             'datasource_health = redash_stmo.health:datasource_health',
-            'datasource_link = redash_stmo.datasource_link:datasource_link'
+            'datasource_link = redash_stmo.datasource_link:datasource_link',
+            'datasource_version = redash_stmo.datasource_version:datasource_version',
         ],
     },
     classifiers=[
