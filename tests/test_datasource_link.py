@@ -5,7 +5,7 @@ from flask import Flask
 
 from redash.models import DataSource
 from redash.query_runner.pg import PostgreSQL
-from redash_stmo.datasource_link import datasource_link, BaseQueryRunner
+from redash_stmo.datasource_link import datasource_link
 
 
 class TestDatasourceLink(BaseTestCase):
