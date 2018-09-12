@@ -1,8 +1,9 @@
+from redash_stmo.resources import add_resource
+
 from redash.models import DataSource
-from redash.handlers.api import api
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.permissions import require_access, view_only
-from redash.query_runner import BaseQueryRunner, query_runners
+from redash.query_runner import query_runners
 
 DATASOURCE_URLS = {
     "bigquery": "https://cloud.google.com/bigquery/docs/reference/legacy-sql",
@@ -62,7 +63,4 @@ def datasource_link(app=None):
             "title": "Documentation URL",
             "default": DATASOURCE_URLS[runner_type]})
 
-    # After api.init_app() is called, api.app should be set by Flask (but it's not) so that
-    # further calls to add_resource() are handled immediately for the given app.
-    api.app = app
-    api.add_org_resource(DataSourceLinkResource, '/api/data_sources/<data_source_id>/link')
+    add_resource(app, DataSourceLinkResource, '/api/data_sources/<data_source_id>/link')
