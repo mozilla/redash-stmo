@@ -4,6 +4,7 @@ import time
 import redash
 
 from redash_stmo import settings
+from redash_stmo.resources import add_resource
 
 from flask import jsonify
 from flask_login import login_required
@@ -14,11 +15,17 @@ from redash.worker import celery
 from redash.utils import parse_human_time
 from redash.monitor import get_status as original_get_status
 from redash.query_runner import BaseQueryRunner
-from redash.handlers.base import routes
+from redash.handlers.base import routes, BaseResource
 from redash.permissions import require_super_admin
+
 
 logger = get_task_logger(__name__)
 
+
+class DataSourceHealthResource(BaseResource):
+    def get(self):
+        health_data = json.loads(redis_connection.get('data_sources:health') or '{}')
+        return jsonify(health_data)
 
 def store_health_status(data_source_id, data_source_name, query_text, data):
     key = "data_sources:health"
@@ -88,7 +95,13 @@ def test_connection(self, custom_query_text=None):
 @require_super_admin
 def stmo_status_api():
     status = original_get_status()
-    status['data_sources'] = json.loads(redis_connection.get('data_sources:health') or '{}')
+    health_data = json.loads(redis_connection.get('data_sources:health') or '{}')
+
+    # Get the top level status for each data source
+    for health_data_point in health_data.values():
+        data_source_name = health_data_point["metadata"]["name"]
+        dashboard_label = "[Data Source Health] {name}".format(name=data_source_name)
+        status[dashboard_label] = health_data_point["status"]
     return jsonify(status)
 
 
@@ -97,6 +110,9 @@ def datasource_health(app=None):
 
     # Override the default status API view with our extended view
     app.view_functions['%s.status_api' % routes.name] = stmo_status_api
+
+    # Add a new endpoint with full health data
+    add_resource(app, DataSourceHealthResource, '/status/data_sources/health.json')
 
     # Add the update_health_status task to a list of periodic tasks
     if not hasattr(app, 'periodic_tasks'):
