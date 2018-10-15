@@ -53,7 +53,7 @@ class DataSourceLinkResource(BaseResource):
         else:
             return {"message": result, "ok": True}
 
-def datasource_link(app=None):
+def link(app=None):
     for runner_type, runner_class in query_runners.items():
         if runner_type not in DATASOURCE_URLS:
             continue
