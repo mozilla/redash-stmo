@@ -59,5 +59,5 @@ def get_data_source_version(query_runner):
     version = version.split(parse_info["delimiter"])[parse_info["index"]]
     return version
 
-def datasource_version(app=None):
+def version(app=None):
     add_resource(app, DataSourceVersionResource, '/api/data_sources/<data_source_id>/version')

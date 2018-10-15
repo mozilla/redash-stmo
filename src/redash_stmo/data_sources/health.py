@@ -105,7 +105,7 @@ def stmo_status_api():
     return jsonify(status)
 
 
-def datasource_health(app=None):
+def health(app=None):
     """A Redash extension to add datasource health status reporting."""
 
     # Override the default status API view with our extended view

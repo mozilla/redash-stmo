@@ -6,21 +6,20 @@ from tests import BaseTestCase
 from flask import Flask
 
 from redash import redis_connection
-from redash_stmo.health import store_health_status, update_health_status, datasource_health
+from redash_stmo.data_sources.health import store_health_status, update_health_status, health
 
 
 
 class TestHealthStatus(BaseTestCase):
     def setUp(self):
         super(TestHealthStatus, self).setUp()
-        self.patched_store_health_status = self._setup_mock('redash_stmo.health.store_health_status')
+        self.patched_store_health_status = self._setup_mock('redash_stmo.data_sources.health.store_health_status')
         self.patched_run_query = self._setup_mock('redash.query_runner.pg.PostgreSQL.run_query')
 
         self.patched_run_query.return_value = ("some_data", None)
         os.environ["REDASH_CUSTOM_HEALTH_QUERIES_1"] = ""
 
-        app = Flask("test")
-        datasource_health(app)
+        health(self.app)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)
