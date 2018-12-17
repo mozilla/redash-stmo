@@ -55,3 +55,5 @@ class DatasourceVersion extends React.Component {
 export default function init(ngModule) {
   ngModule.component('datasourceVersion', react2angular(DatasourceVersion, ['datasourceId'], ['clientConfig']));
 }
+
+init.init = true;
