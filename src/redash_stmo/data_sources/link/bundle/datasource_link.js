@@ -59,3 +59,5 @@ class DatasourceLink extends React.Component {
 export default function init(ngModule) {
   ngModule.component('datasourceLink', react2angular(DatasourceLink, ['datasourceId'], ['clientConfig']));
 }
+
+init.init = true;
