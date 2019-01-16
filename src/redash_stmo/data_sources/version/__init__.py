@@ -12,21 +12,22 @@ logger = logging.getLogger(__name__)
 
 DATASOURCE_VERSION_PARSE_INFO = {
     "pg": {
-        "version_query": "select version()",
+        "version_query": "SELECT version();",
         "delimiter": " ",
         "index": 1
     },
     "redshift": {
-        "version_query": "select version()",
+        "version_query": "SELECT version();",
         "delimiter": " ",
         "index": -1
     },
     "mysql": {
-        "version_query": "select version()",
+        "version_query": "SELECT VERSION() AS version;",
         "delimiter": "-",
         "index": 0
-    }
+    },
 }
+
 
 class DataSourceVersionResource(BaseResource):
     def get(self, data_source_id):
@@ -38,6 +39,7 @@ class DataSourceVersionResource(BaseResource):
         require_access(data_source.groups, self.current_user, view_only)
         version_info = get_data_source_version(data_source.query_runner)
         return {"version": version_info}
+
 
 def get_data_source_version(query_runner):
     parse_info = DATASOURCE_VERSION_PARSE_INFO.get(query_runner.type())
@@ -58,6 +60,7 @@ def get_data_source_version(query_runner):
 
     version = version.split(parse_info["delimiter"])[parse_info["index"]]
     return version
+
 
 def version(app=None):
     add_resource(app, DataSourceVersionResource, '/api/data_sources/<data_source_id>/version')
