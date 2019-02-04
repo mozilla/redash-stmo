@@ -5,6 +5,8 @@ python:
 services:
 - docker
 - redis
+install:
+- pip install --upgrade pip setuptools wheel
 script:
 - docker-compose build
 - docker-compose up --no-start
