@@ -1,6 +1,17 @@
 Changelog
 =========
 
+2019.2.1
+--------
+
+:date: 2019-02-04
+
+* Fix test setup and enabled coverage reporting on codecov:
+
+    https://codecov.io/gh/mozilla/redash-stmo
+
+* Push README to PyPI.
+
 2019.2.0
 --------
 
