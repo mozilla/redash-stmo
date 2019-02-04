@@ -1,16 +1,7 @@
 sudo: false
-language: python
-python:
-- '2.7'
-- '3.4'
-- '3.5'
-- '3.6'
 services:
 - docker
 - redis
-cache: pip
-install:
-- pip install --upgrade pip setuptools wheel
 script:
 - docker-compose build
 - docker-compose up --no-start
@@ -18,8 +9,6 @@ script:
 - docker-compose run --rm server sh -c "/redash-stmo/bin/wait-for-it.sh postgres:5432 -- python manage.py database create_tables"
 - docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;"
 - docker-compose run server tests
-after_success:
-- bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: pypi
   user: emtwo
@@ -29,4 +18,3 @@ deploy:
   on:
     tags: true
     repo: mozilla/redash-stmo
-    python: '3.5'
