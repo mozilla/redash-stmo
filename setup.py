@@ -1,4 +1,13 @@
+import os
+import codecs
 from setuptools import setup, find_packages
+
+
+def read(*parts):
+    filename = os.path.join(os.path.dirname(__file__), *parts)
+    with codecs.open(filename, encoding='utf-8') as fp:
+        return fp.read()
+
 
 setup(
     name='redash-stmo',
@@ -15,6 +24,7 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     description="Extensions to Redash by Mozilla",
+    long_description=read('README.rst'),
     author='Mozilla Foundation',
     author_email='dev-webdev@lists.mozilla.org',
     url='https://github.com/mozilla/redash-stmo',
