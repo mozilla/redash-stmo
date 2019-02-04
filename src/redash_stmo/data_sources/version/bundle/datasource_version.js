@@ -1,3 +1,4 @@
+/* eslint-disable no-console, camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -15,23 +16,6 @@ class DatasourceVersion extends React.Component {
     };
   }
 
-  loadURLData() {
-    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/version`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        return {};
-      })
-      .catch(error => {
-        console.error(`Error loading data source version: ${error}`);
-        return {};
-      })
-      .then((json) => {
-        this.setState({ version: json.version });
-      });
-  }
-
   componentDidMount() {
     this.loadURLData();
   }
@@ -40,6 +24,23 @@ class DatasourceVersion extends React.Component {
     if (this.props.datasourceId !== prevProps.datasourceId) {
       this.loadURLData();
     }
+  }
+
+  loadURLData() {
+    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/version`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return {};
+      })
+      .catch((error) => {
+        console.error(`Error loading data source version: ${error}`);
+        return {};
+      })
+      .then((json) => {
+        this.setState({ version: json.version });
+      });
   }
 
   render() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console, camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -16,24 +17,6 @@ class DatasourceLink extends React.Component {
     };
   }
 
-  loadURLData() {
-    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/link`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        return {};
-      })
-      .catch(error => {
-        console.error(`Error loading data source URL: ${error}`);
-        return {};
-      })
-      .then((json) => {
-        const { type_name, doc_url } = json.message;
-        this.setState({ type_name, doc_url });
-      });
-  }
-
   componentDidMount() {
     this.loadURLData();
   }
@@ -42,6 +25,24 @@ class DatasourceLink extends React.Component {
     if (this.props.datasourceId !== prevProps.datasourceId) {
       this.loadURLData();
     }
+  }
+
+  loadURLData() {
+    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/link`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return {};
+      })
+      .catch((error) => {
+        console.error(`Error loading data source URL: ${error}`);
+        return {};
+      })
+      .then((json) => {
+        const { type_name, doc_url } = json.message;
+        this.setState({ type_name, doc_url });
+      });
   }
 
   render() {
