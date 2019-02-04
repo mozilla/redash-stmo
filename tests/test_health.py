@@ -3,11 +3,9 @@ import json
 import mock
 
 from tests import BaseTestCase
-from flask import Flask
 
 from redash import redis_connection
 from redash_stmo.data_sources.health import store_health_status, update_health_status, health
-
 
 
 class TestHealthStatus(BaseTestCase):
@@ -102,10 +100,10 @@ class TestHealthStatus(BaseTestCase):
             self.assertIsNotNone(NEW_STATUS[key])
 
     def test_health_status_run_query_throws_noop_not_implemented_exception(self):
-        data_source = self.factory.create_data_source()
+        self.factory.create_data_source()
 
         def exception_raiser(*args, **kwargs):
-          raise NotImplementedError
+            raise NotImplementedError
 
         self.patched_run_query.side_effect = exception_raiser
         update_health_status()
@@ -117,7 +115,7 @@ class TestHealthStatus(BaseTestCase):
         data_source = self.factory.create_data_source()
 
         def exception_raiser(*args, **kwargs):
-          raise Exception
+            raise Exception
 
         self.patched_run_query.side_effect = exception_raiser
         update_health_status()

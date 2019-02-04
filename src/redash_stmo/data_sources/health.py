@@ -1,7 +1,6 @@
 import os
 import json
 import time
-import redash
 
 from redash_stmo import settings
 from redash_stmo.resources import add_resource
@@ -14,7 +13,6 @@ from redash import models, redis_connection, statsd_client
 from redash.worker import celery
 from redash.utils import parse_human_time
 from redash.monitor import get_status as original_get_status
-from redash.query_runner import BaseQueryRunner
 from redash.handlers.base import routes, BaseResource
 from redash.permissions import require_super_admin
 
@@ -26,6 +24,7 @@ class DataSourceHealthResource(BaseResource):
     def get(self):
         health_data = json.loads(redis_connection.get('data_sources:health') or '{}')
         return jsonify(health_data)
+
 
 def store_health_status(data_source_id, data_source_name, query_text, data):
     key = "data_sources:health"
@@ -90,6 +89,7 @@ def test_connection(self, custom_query_text=None):
 
     if error is not None:
         raise Exception(error)
+
 
 @login_required
 @require_super_admin

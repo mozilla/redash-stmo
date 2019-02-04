@@ -2,15 +2,13 @@ import json
 import mock
 
 from tests import BaseTestCase
-from flask import Flask
 
-from redash.models import DataSource
-from redash.query_runner.pg import PostgreSQL
 from redash_stmo.data_sources.version import version
 
 
 class TestDatasourceVersion(BaseTestCase):
     EXPECTED_DOC_URL = "www.example.com"
+
     def setUp(self):
         super(TestDatasourceVersion, self).setUp()
         self.admin = self.factory.create_admin()

@@ -1,15 +1,12 @@
 import mock
 
 from tests import BaseTestCase
-from flask import Flask
-
-from redash.models import DataSource
-from redash.query_runner.pg import PostgreSQL
 from redash_stmo.data_sources.link import link
 
 
 class TestDatasourceLink(BaseTestCase):
     EXPECTED_DOC_URL = "www.example.com"
+
     def setUp(self):
         super(TestDatasourceLink, self).setUp()
         self.patched_query_runners = self._setup_mock('redash_stmo.data_sources.link.query_runners')
