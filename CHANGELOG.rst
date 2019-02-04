@@ -1,10 +1,57 @@
 Changelog
 =========
 
+2019.2.0
+--------
+
+:date: 2019-02-04
+
+* Fix ESlint errors.
+
+2018.12.0
+---------
+
+:date: 2018-12-17
+
+* Fix initialization of datasource frontend extensions.
+
+
+2018.11.0
+---------
+
+:date: 2018-11-27
+
+* Add datasource health API endpoint.
+
+* Reorganizations for data source extensions.
+
+2018.9.1
+--------
+
+:date: 2018-09-14
+
+* Add datasource version extension.
+
+* Minor cleanups for datasource link extension.
+
+2018.9.0
+--------
+
+:date: 2018-09-11
+
+* Add datasource link extension.
+
+2018.8.1
+--------
+
+:date: 2018-08-10
+
+* Fix name of task parameter name.
+
 2018.8.0
 --------
 
-:data: 2018-08-09
+:date: 2018-08-09
 
 * Add docker integration for running tests
 * Add travis CI integration
