@@ -1,0 +1,12 @@
+[run]
+source = redash_stmo
+branch = True
+data_file = /tmp/.coverage
+
+[report]
+show_missing = True
+omit =
+    tests/*
+
+[xml]
+output = /tmp/coverage.xml

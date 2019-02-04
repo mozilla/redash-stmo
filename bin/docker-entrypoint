@@ -17,7 +17,11 @@ tests() {
   else
     TEST_ARGS=$@
   fi
-  exec pytest $TEST_ARGS
+  pytest $TEST_ARGS
+  # only run this if the CI env var is set:
+  if [[ ! -z ${CI+check} ]]; then
+    bash <(curl -s https://codecov.io/bash) -s /tmp
+  fi
 }
 
 case "$1" in

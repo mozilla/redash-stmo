@@ -8,9 +8,8 @@ script:
 - docker-compose start postgres
 - docker-compose run --rm server sh -c "/redash-stmo/bin/wait-for-it.sh postgres:5432 -- python manage.py database create_tables"
 - docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;"
-- docker-compose run server tests
-after_success:
-- bash <(curl -s https://codecov.io/bash)
+- export CI_ENV=`bash <(curl -s https://codecov.io/env)`
+- docker-compose run $CI_ENV server tests
 deploy:
   provider: pypi
   user: emtwo
