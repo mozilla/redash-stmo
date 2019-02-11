@@ -1,4 +1,4 @@
-FROM redash/redash:latest
+FROM mozilla/redash:latest
 
 COPY . /redash-stmo
 
@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=0 \
 	REDASH_DATABASE_URL=postgresql://postgres@postgres/postgres
 
 USER root
-RUN pip install -e /redash-stmo
+RUN pip uninstall -y redash-stmo && pip install -e /redash-stmo
 USER redash
 
 ENTRYPOINT ["/redash-stmo/bin/docker-entrypoint"]
