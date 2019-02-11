@@ -5,7 +5,7 @@ import mock
 from tests import BaseTestCase
 
 from redash import redis_connection
-from redash_stmo.data_sources.health import store_health_status, update_health_status, health
+from redash_stmo.data_sources.health import store_health_status, update_health_status
 
 
 class TestHealthStatus(BaseTestCase):
@@ -16,8 +16,6 @@ class TestHealthStatus(BaseTestCase):
 
         self.patched_run_query.return_value = ("some_data", None)
         os.environ["REDASH_CUSTOM_HEALTH_QUERIES_1"] = ""
-
-        health(self.app)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)
