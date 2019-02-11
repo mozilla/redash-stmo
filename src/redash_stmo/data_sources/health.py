@@ -66,7 +66,7 @@ def update_health_status():
         except NotImplementedError:
             logger.info(u"Unable to compute health status without test query for %s", data_source.name)
             continue
-        except Exception as e:
+        except Exception:
             logger.warning(u"Failed health check for the data source: %s", data_source.name, exc_info=1)
             statsd_client.incr('update_health_status.error')
             logger.info(u"task=update_health_status state=error ds_id=%s runtime=%.2f", data_source.id, time.time() - start_time)

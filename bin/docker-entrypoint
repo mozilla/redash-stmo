@@ -2,6 +2,7 @@
 set -e
 
 server() {
+  pip install --user -e /redash-stmo
   exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
 }
 
@@ -10,6 +11,8 @@ create_db() {
 }
 
 tests() {
+  pip install --user /redash-stmo
+  pip install --user pytest mock pytest-cov pytest-flake8
   export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
 
   if [ $# -eq 0 ]; then
@@ -23,6 +26,8 @@ tests() {
     bash <(curl -s https://codecov.io/bash) -s /tmp
   fi
 }
+
+# always install inside the running container
 
 case "$1" in
   tests)
