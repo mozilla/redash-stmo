@@ -1,6 +1,8 @@
 Redash-STMO
 ===========
 
+  Or as it should have been called: St. Moredash ;)
+
 `Redash <https://redash.io>`_ extensions for
 `sql.telemetry.mozilla.org <https://sql.telemetry.mozilla.org/>`_.
 
