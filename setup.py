@@ -31,10 +31,10 @@ setup(
     license='MPL 2.0',
     entry_points={
         'redash.extensions': [
-            'dockerflow = redash_stmo.dockerflow:dockerflow',
-            'datasource_health = redash_stmo.data_sources.health:health',
-            'datasource_link = redash_stmo.data_sources.link:link',
-            'datasource_version = redash_stmo.data_sources.version:version',
+            'dockerflow = redash_stmo.dockerflow:extension',
+            'datasource_health = redash_stmo.data_sources.health:extension',
+            'datasource_link = redash_stmo.data_sources.link:extension',
+            'datasource_version = redash_stmo.data_sources.version:extension',
         ],
     },
     classifiers=[
