@@ -62,5 +62,5 @@ def get_data_source_version(query_runner):
     return version
 
 
-def version(app=None):
+def extension(app=None):
     add_resource(app, DataSourceVersionResource, '/api/data_sources/<data_source_id>/version')
