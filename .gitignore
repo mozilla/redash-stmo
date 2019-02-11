@@ -1,5 +1,3 @@
-htmlcov
-.tox
 .coverage
 coverage.xml
 .cache

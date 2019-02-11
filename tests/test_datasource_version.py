@@ -24,7 +24,7 @@ class TestDatasourceVersion(BaseTestCase):
         self.patched_runner_type.return_value = runner_type
         self.patched_run_query.return_value = (json.dumps({
             "rows":
-                [{ "version": version_string.format(version=expected_version) }]
+                [{"version": version_string.format(version=expected_version)}]
         }), None)
         rv = self.make_request('get', '/api/data_sources/{}/version'.format(self.data_source.id), user=self.admin)
         self.assertEqual(200, rv.status_code)
@@ -58,7 +58,7 @@ class TestDatasourceVersion(BaseTestCase):
         self.patched_runner_type.return_value = "pg"
         self.patched_run_query.return_value = (json.dumps({
             "rows":
-                [{ "bad_json": "foo" }]
+                [{"bad_json": "foo"}]
         }), None)
         rv = self.make_request('get', '/api/data_sources/{}/version'.format(self.data_source.id), user=self.admin)
         self.assertEqual(200, rv.status_code)
