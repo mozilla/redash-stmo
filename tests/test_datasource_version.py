@@ -3,8 +3,6 @@ import mock
 
 from tests import BaseTestCase
 
-from redash_stmo.data_sources.version import version
-
 
 class TestDatasourceVersion(BaseTestCase):
     EXPECTED_DOC_URL = "www.example.com"
@@ -15,7 +13,6 @@ class TestDatasourceVersion(BaseTestCase):
         self.data_source = self.factory.create_data_source()
         self.patched_run_query = self._setup_mock('redash.query_runner.pg.PostgreSQL.run_query')
         self.patched_runner_type = self._setup_mock('redash.query_runner.pg.PostgreSQL.type')
-        version(self.app)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)

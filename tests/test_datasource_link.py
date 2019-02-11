@@ -1,7 +1,6 @@
 import mock
 
 from tests import BaseTestCase
-from redash_stmo.data_sources.link import link
 
 
 class TestDatasourceLink(BaseTestCase):
@@ -11,7 +10,6 @@ class TestDatasourceLink(BaseTestCase):
         super(TestDatasourceLink, self).setUp()
         self.patched_query_runners = self._setup_mock('redash_stmo.data_sources.link.query_runners')
         self.patched_query_runners.return_value = {}
-        link(self.app)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)
