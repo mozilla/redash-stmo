@@ -35,6 +35,7 @@ setup(
             'datasource_health = redash_stmo.data_sources.health:extension',
             'datasource_link = redash_stmo.data_sources.link:extension',
             'datasource_version = redash_stmo.data_sources.version:extension',
+            'handler_queryresults = redash_stmo.handlers.query_results:handler_queryresults',
         ],
     },
     classifiers=[
