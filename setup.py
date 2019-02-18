@@ -19,6 +19,7 @@ setup(
     install_requires=[
         'dockerflow>=2018.4.0',
         'requests',
+        'sqlparse',
     ],
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
@@ -35,6 +36,7 @@ setup(
             'datasource_health = redash_stmo.data_sources.health:extension',
             'datasource_link = redash_stmo.data_sources.link:extension',
             'datasource_version = redash_stmo.data_sources.version:extension',
+            'handler_queryresults = redash_stmo.handlers.query_results:extension',
         ],
     },
     classifiers=[
