@@ -55,6 +55,6 @@ def extract_table_identifiers(token_stream):
             yield item.value
 
 
-def extract_tables(sql):
+def extract_table_names(sql):
     stream = extract_from_part(sqlparse.parse(sql)[0])
     return list(extract_table_identifiers(stream))
