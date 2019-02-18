@@ -1,6 +1,13 @@
 Redash-STMO
 ===========
 
+.. image:: https://travis-ci.org/mozilla/redash-stmo.svg?branch=master
+    :target: https://travis-ci.org/mozilla/redash-stmo
+
+.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/mozilla/redash-stmo
+
+
   Or as it should have been called: St. Moredash ;)
 
 .. image:: https://travis-ci.org/mozilla/redash-stmo.svg?branch=master
