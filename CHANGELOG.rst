@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2019.2.2
+--------
+
+:date: 2019-02-25
+
+* New tag line: St. Moredash. (S.T.M.O.R.E.D.A.S.H.)
+
+* Implement own Presto query runner that pretty prints response data.
+
+* Add own query result API endpoint handler that adds aditional permission
+  checks for query results that are being referred in a query result based
+  query.
+
+* Use mozilla/redash Docker image as base image for tests for improved
+  test coverage.
+
 2019.2.1
 --------
 
