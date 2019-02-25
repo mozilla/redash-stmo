@@ -1,4 +1,10 @@
-.PHONY: build clean release sdist test wheel
+.PHONY: bash build clean package release sdist test wheel
+
+bash:
+	docker-compose run --rm server bash
+
+build:
+	docker-compose build --pull
 
 clean:
 	rm -rf build/ dist/
@@ -9,9 +15,9 @@ sdist:
 wheel:
 	python setup.py bdist_wheel
 
-build: clean sdist wheel
+package: clean sdist wheel
 
-release: build
+release: package
 	twine upload -s dist/*
 
 test:
