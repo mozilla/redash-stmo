@@ -1,13 +1,9 @@
 FROM mozilla/redash:latest
 
-ENV PYTHONUNBUFFERED=0 \
-	PYTHONPATH=/redash-stmo:/redash-stmo/src:/app \
-	REDASH_LOG_LEVEL="INFO" \
-	REDASH_REDIS_URL=redis://redis:6379/0 \
-	REDASH_DATABASE_URL=postgresql://postgres@postgres/postgres
-
 USER root
-RUN pip uninstall -y redash-stmo
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip uninstall -qy redash-stmo \
+	&& pip3 install flit
 USER redash
 
-ENTRYPOINT ["/redash-stmo/bin/docker-entrypoint"]
+ENTRYPOINT ["/extension/bin/docker-entrypoint"]

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+dist-name = "redash-stmo"
+module = "redash_stmo"
+author = "Mozilla Foundation"
+author-email = "dev-webdev@lists.mozilla.org"
+home-page = "https://github.com/mozilla/redash-stmo"
+requires = [
+    "dockerflow>=2018.4.0",
+    "requests",
+    "sqlparse",
+    "six",
+    "pyhive",
+]
+description-file = "README.rst"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment :: Mozilla",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Topic :: Internet :: WWW/HTTP",
+]
+license = "MPL 2.0"
+
+
+[tool.flit.metadata.requires-extra]
+test = [
+    "pytest",
+    "mock",
+    "pytest-cov",
+    "pytest-flake8",
+]
+
+[tool.flit.entrypoints."redash.extensions"]
+dockerflow = "redash_stmo.dockerflow:extension"
+datasource_health = "redash_stmo.data_sources.health:extension"
+datasource_link = "redash_stmo.data_sources.link:extension"
+datasource_version = "redash_stmo.data_sources.version:extension"
+handler_queryresults = "redash_stmo.handlers.query_results:extension"
+queryrunner_presto = "redash_stmo.query_runner.presto:extension"

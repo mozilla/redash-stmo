@@ -1,42 +1,46 @@
 #!/bin/bash
 set -e
 
+pushd /extension
+# always install inside the running container
+flit install --user --python=/usr/bin/python --symlink --extras=test
+popd
+
 server() {
-  pip install --user -e /redash-stmo
   exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
 }
 
-create_db() {
-  exec /app/manage.py database create_tables
+create_tables() {
+  pushd /app
+  /extension/bin/wait-for-it.sh postgres:5432 -- /app/manage.py database create_tables
+  popd
 }
 
 tests() {
-  pip install --user /redash-stmo
-  pip install --user pytest mock pytest-cov pytest-flake8
   export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
+  create_tables
 
   if [ $# -eq 0 ]; then
-    TEST_ARGS=/redash-stmo
+    TEST_ARGS=/extension
   else
     TEST_ARGS=$@
   fi
   pytest $TEST_ARGS
-  # only run this if the CI env var is set:
-  if [[ ! -z ${CI+check} ]]; then
-    bash <(curl -s https://codecov.io/bash) -s /tmp
-  fi
 }
-
-# always install inside the running container
 
 case "$1" in
   tests)
 	shift
 	tests $@
 ;;
-  create_db)
+  ci)
 	shift
-	create_db
+	tests $@
+  bash <(curl -s https://codecov.io/bash) -s /tmp
+;;
+  create_tables)
+	shift
+	create_tables
 ;;
   manage)
 	shift
