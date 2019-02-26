@@ -1,4 +1,4 @@
-.PHONY: bash build clean package release sdist test wheel
+.PHONY: bash build clean tables test_database package release sdist test wheel
 
 bash:
 	docker-compose run --rm server bash
@@ -20,10 +20,12 @@ package: clean sdist wheel
 release: package
 	twine upload -s dist/*
 
-test:
-	docker-compose build --pull
-	docker-compose up -d
-	docker-compose run --rm server sh -c "/redash-stmo/bin/wait-for-it.sh postgres:5432 -- python /app/manage.py database create_tables"
-	docker-compose run --rm postgres psql -h postgres -U postgres -c "create database tests;" || echo "Test database exists already."
-	docker-compose run --rm $(CI_ENV) server tests
-	docker-compose down
+test_database:
+	docker-compose up --no-start
+	docker-compose start postgres
+	docker-compose run --rm server /extension/bin/wait-for-it.sh postgres:5432 -- echo "Postgres started"
+	docker-compose run --rm postgres psql -U postgres -h postgres -c "create database tests;" || echo "Error while creating tests database"
+
+test: build test_database
+	docker-compose run --rm server tests
+	docker-compose stop

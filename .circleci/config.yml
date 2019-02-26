@@ -1,0 +1,72 @@
+version: 2.0
+
+# Jobs: see https://circleci.com/docs/2.0/jobs-steps/
+jobs:
+  tests:
+    machine:
+      image: circleci/classic:edge
+    environment:
+      COMPOSE_FILE: .circleci/docker-compose.circle.yml
+      COMPOSE_PROJECT_NAME: redash
+    steps:
+      - checkout
+      - run:
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Build Docker Images
+          command: |
+            set -x
+            make build
+      - run:
+          name: Run Tests
+          command: |
+            set -x
+            export CI_ENV=`bash <(curl -s https://codecov.io/env)`
+            docker-compose up -d
+            sleep 10
+            docker-compose run --rm postgres psql -U postgres -h postgres -c "create database tests;" || echo "Error while creating tests database"
+            docker-compose run --name tests --rm $(CI_ENV) server ci
+
+  # Runs when the repository is tagged for release; see the workflows section
+  # below for trigger logic.
+  deploy:
+    docker:
+      - image: python:3.6
+    steps:
+      - checkout
+      - run:
+          name: Install deployment tools
+          command: |
+            pip install --upgrade setuptools flit wheel twine
+      - run:
+          name: Create the distribution files
+          command: |
+            flit build
+      - run:
+          name: Check Readme rendering
+          command: |
+            twine check dist/*
+      - run:
+          name: Upload to PyPI
+          command: |
+            flit publish
+
+# Workflows: see https://circleci.com/docs/2.0/workflows/
+workflows:
+  version: 2
+  build:
+    jobs:
+      - tests
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            tags:
+              only: /[0-9]{2}.[0-9]{1,2}.[0-9]+/  # Calver: YY.M.PATCH
+            branches:
+              # Ignore all branches; this workflow should only run for tags.
+              ignore: /.*/

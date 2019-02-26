@@ -1,23 +1,20 @@
 Redash-STMO
 ===========
 
-.. image:: https://travis-ci.org/mozilla/redash-stmo.svg?branch=master
-    :target: https://travis-ci.org/mozilla/redash-stmo
-
-.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/mozilla/redash-stmo
-
-
-  Or as it should have been called: St. Moredash ;)
-
-.. image:: https://travis-ci.org/mozilla/redash-stmo.svg?branch=master
-    :target: https://travis-ci.org/mozilla/redash-stmo
-
-.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/mozilla/redash-stmo
-
 `Redash <https://redash.io>`_ extensions for
 `sql.telemetry.mozilla.org <https://sql.telemetry.mozilla.org/>`_.
+
+Or as it should have been called: *St. Moredash* ;)
+
+.. image:: https://circleci.com/gh/mozilla/redash-stmo.svg?style=svg
+    :target: https://circleci.com/gh/mozilla/redash-stmo
+
+.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/mozilla/redash-stmo
+
+.. image:: https://img.shields.io/badge/calver-YY.M.PATCH-22bfda.svg
+   :target: https://calver.org/
+   :alt: CalVer - Timely Software Versioning
 
 Installation
 ------------
