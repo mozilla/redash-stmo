@@ -4,7 +4,7 @@ Changelog
 2019.2.2
 --------
 
-:date: 2019-02-25
+:date: 2019-02-28
 
 * New tag line: St. Moredash. (S.T.M.O.R.E.D.A.S.H.)
 
@@ -16,6 +16,10 @@ Changelog
 
 * Use mozilla/redash Docker image as base image for tests for improved
   test coverage.
+
+* Move to Circle CI for continuous integration:
+
+    https://circleci.com/gh/mozilla/redash-stmo
 
 2019.2.1
 --------
