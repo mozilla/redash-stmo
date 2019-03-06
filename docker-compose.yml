@@ -1,4 +1,4 @@
-version: '3'
+version: "3.2"
 services:
   server:
     build: .
@@ -10,6 +10,10 @@ services:
       - "5000:5000"
     volumes:
       - $PWD:/extension
+      - cache:/home/redash/.cache:delegated
+      - client_dist:/app/client/dist:delegated
+      - python_local:/home/redash/.local:delegated
+      - node_modules:/app/node_modules:delegated
     environment:
       PYTHONPATH: /app
       PYTHONUNBUFFERED: 0
@@ -33,3 +37,9 @@ services:
     image: postgres:9.5.6
     command: "postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF"
     restart: unless-stopped
+
+volumes:
+  node_modules:
+  python_local:
+  cache:
+  client_dist:
