@@ -41,6 +41,9 @@ test = [
     "pytest-cov",
     "pytest-flake8",
 ]
+dev = [
+    "watchdog",
+]
 
 [tool.flit.entrypoints."redash.extensions"]
 dockerflow = "redash_stmo.dockerflow:extension"
