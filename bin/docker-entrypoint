@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# make sure the npm clean command is only removing the content of /app/client/dist
+# and not the directory itself so mounting it works as expected
+sed -i -e 's/"rm -rf \.\/client\/dist\/"/"rm -rf \.\/client\/dist\/\*"/g' package.json
+
 pushd /extension
 # always install inside the running container
 flit install --user --python=/usr/bin/python --symlink --extras=test
