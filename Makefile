@@ -1,4 +1,4 @@
-.PHONY: bash build clean tables test_database package release sdist test wheel
+.PHONY: bash build clean devserver tables test_database package release sdist test up wheel
 
 bash:
 	docker-compose run --rm server bash
@@ -8,6 +8,12 @@ build:
 
 clean:
 	rm -rf build/ dist/
+
+up:
+	docker-compose up
+
+devserver:
+	docker-compose run --publish 8080:8080 server devserver
 
 sdist:
 	python setup.py sdist

@@ -23,6 +23,33 @@ Please install the package using your favorite package installer::
 
     pip install redash-stmo
 
+Development
+-----------
+
+Running the full site please run:
+
+```
+make up
+```
+
+To also run the webpack devserver please run in parallel:
+
+```
+make devserver
+```
+
+To enter the container and run a bash shell run:
+
+```
+make bash
+```
+
+To run the tests (from the host machine) run:
+
+```
+make test
+```
+
 Issues & questions
 ------------------
 

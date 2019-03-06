@@ -3,15 +3,38 @@ set -e
 
 # make sure the npm clean command is only removing the content of /app/client/dist
 # and not the directory itself so mounting it works as expected
-sed -i -e 's/"rm -rf \.\/client\/dist\/"/"rm -rf \.\/client\/dist\/\*"/g' package.json
+if [ -f /app/package.json ]; then
+    printf "Patching package.json..."
+    if ! sed -i -e 's/"rm -rf \.\/client\/dist\/"/"rm -rf \.\/client\/dist\/\*"/g' /app/package.json
+    then
+      echo "failed."
+    else
+      echo "done."
+    fi
+fi
 
 pushd /extension
 # always install inside the running container
-flit install --user --python=/usr/bin/python --symlink --extras=test
+PIP_QUIET=true flit install --user --python=/usr/bin/python --symlink --extras=test,dev
 popd
+
+# Trash the existing and copy the current extension bundles again
+rm -rf /app/client/app/extensions/*
+/app/bin/bundle-extensions
 
 server() {
   exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
+}
+
+devserver() {
+  # Start a watchdog to copy extension bundles over to /app/client/app/extensions
+  ~/.local/bin/watchmedo shell-command \
+    --patterns="*.js;*.jsx" \
+    --ignore-directories \
+    --recursive \
+    --command='/app/bin/bundle-extensions' \
+    /extension/ &
+  npm run start
 }
 
 create_tables() {
@@ -53,6 +76,10 @@ case "$1" in
   server)
 	shift
 	server $@
+;;
+  devserver)
+	shift
+	devserver $@
 ;;
   *)
 	exec "$@"
