@@ -52,3 +52,6 @@ datasource_link = "redash_stmo.data_sources.link:extension"
 datasource_version = "redash_stmo.data_sources.version:extension"
 handler_queryresults = "redash_stmo.handlers.query_results:extension"
 queryrunner_presto = "redash_stmo.query_runner.presto:extension"
+
+[tool.flit.entrypoints."redash.periodic_tasks"]
+update_health_status = "redash_stmo.data_sources.health:periodic_task"
