@@ -26,7 +26,15 @@ Please install the package using your favorite package installer::
 Development
 -----------
 
-Running the full site please run:
+Running the full site please run the follow steps.
+
+To Create the database (only once) run:
+
+```
+make database
+```
+
+To start the containers (Backend, Celery, Redis, Postgres) run:
 
 ```
 make up
@@ -42,6 +50,12 @@ To enter the container and run a bash shell run:
 
 ```
 make bash
+```
+
+and then run this inside the container:
+
+```
+npm install
 ```
 
 To run the tests (from the host machine) run:

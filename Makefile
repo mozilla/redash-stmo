@@ -1,4 +1,4 @@
-.PHONY: bash build clean devserver tables test_database package release sdist test up wheel
+.PHONY: bash build clean database devserver test_database package release sdist test up wheel
 
 bash:
 	docker-compose run --rm server bash
@@ -11,6 +11,9 @@ clean:
 
 up:
 	docker-compose up
+
+database:
+	docker-compose run --rm server create_tables
 
 devserver:
 	docker-compose run --publish 8080:8080 server devserver
