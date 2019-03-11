@@ -34,35 +34,25 @@ To Create the database (only once) run:
 make database
 ```
 
-To start the containers (Backend, Celery, Redis, Postgres) run:
+To start the containers (Backend, Celery, Redis, Postgres) run::
 
-```
-make up
-```
+    make up
 
-To also run the webpack devserver please run in parallel:
+To also run the webpack devserver please run in parallel::
 
-```
 make devserver
-```
 
-To enter the container and run a bash shell run:
+To enter the container and run a bash shell run::
 
-```
-make bash
-```
+    make bash
 
-and then run this inside the container:
+and then run this inside the container::
 
-```
-npm install
-```
+    npm install
 
-To run the tests (from the host machine) run:
+To run the tests (from the host machine) run::
 
-```
-make test
-```
+    make test
 
 Issues & questions
 ------------------
