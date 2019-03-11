@@ -28,11 +28,9 @@ Development
 
 Running the full site please run the follow steps.
 
-To Create the database (only once) run:
+To Create the database (only once) run::
 
-```
-make database
-```
+    make database
 
 To start the containers (Backend, Celery, Redis, Postgres) run::
 
@@ -40,7 +38,7 @@ To start the containers (Backend, Celery, Redis, Postgres) run::
 
 To also run the webpack devserver please run in parallel::
 
-make devserver
+    make devserver
 
 To enter the container and run a bash shell run::
 
