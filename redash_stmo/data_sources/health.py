@@ -114,11 +114,10 @@ def extension(app=None):
     # Add a new endpoint with full health data
     add_resource(app, DataSourceHealthResource, '/status/data_sources/health.json')
 
-    # Add the update_health_status task to a list of periodic tasks
-    if not hasattr(app, 'periodic_tasks'):
-        app.periodic_tasks = {}
 
-    app.periodic_tasks['update_health_status'] = {
+def periodic_task():
+    """Add the update_health_status task to a list of periodic tasks"""
+    return {
         'sig': update_health_status.s(),
         'schedule': settings.HEALTH_QUERIES_REFRESH_SCHEDULE,
     }

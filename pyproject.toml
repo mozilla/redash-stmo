@@ -55,3 +55,6 @@ datasource_version = "redash_stmo.data_sources.version:extension"
 handler_queryresults = "redash_stmo.handlers.query_results:extension"
 handler_remote_user_auth = "redash_stmo.handlers.authentication.remote_user_auth:extension"
 queryrunner_presto = "redash_stmo.query_runner.presto:extension"
+
+[tool.flit.entrypoints."redash.periodic_tasks"]
+update_health_status = "redash_stmo.data_sources.health:periodic_task"
