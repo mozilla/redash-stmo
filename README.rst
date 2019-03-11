@@ -26,27 +26,46 @@ Please install the package using your favorite package installer::
 Development
 -----------
 
-Running the full site please run the follow steps.
+During the development we're providing some convenience Make tasks that are
+supposed to be run from the Docker host machine, not from inside a container.
 
-To Create the database (only once) run::
+Create the database
+~~~~~~~~~~~~~~~~~~~
+
+Only once please::
 
     make database
 
-To start the containers (Backend, Celery, Redis, Postgres) run::
+Install NPM modules
+~~~~~~~~~~~~~~~~~~~
+
+First install the Node modules::
+
+    make node_modules
+
+Start the containers
+~~~~~~~~~~~~~~~~~~~~
+
+Start backend, Celery, Redis, Postgres::
 
     make up
 
-To also run the webpack devserver please run in parallel::
+Run webpack devserver
+~~~~~~~~~~~~~~~~~~~~~
+
+Please run in parallel to the containers above::
 
     make devserver
+
+Start shell
+~~~~~~~~~~~
 
 To enter the container and run a bash shell run::
 
     make bash
 
-and then run this inside the container::
-
-    npm install
+Run tests
+~~~~~~~~~
 
 To run the tests (from the host machine) run::
 
