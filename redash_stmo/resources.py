@@ -1,4 +1,4 @@
-from redash.handlers import api
+from redash.handlers.api import api
 
 
 def add_resource(app, *args, **kwargs):
