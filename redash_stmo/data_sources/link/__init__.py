@@ -1,9 +1,9 @@
-from redash_stmo.resources import add_resource
-
 from redash.models import DataSource
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.permissions import require_access, view_only
 from redash.query_runner import query_runners
+
+from redash_stmo.resources import add_resource
 
 DATASOURCE_URLS = {
     "bigquery": "https://cloud.google.com/bigquery/docs/reference/legacy-sql",

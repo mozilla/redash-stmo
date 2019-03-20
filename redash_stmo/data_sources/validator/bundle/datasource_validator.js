@@ -3,14 +3,14 @@ import React from 'react';
 import { render } from 'react-dom';
 import { debounce } from 'lodash';
 
-function getQueryStatus($http, query, data_source_id) {
-  return $http.post('api/query_check', { query, data_source_id });
+function getValidateQuery($http, dataSourceId, query) {
+  return $http.post(`api/data_sources/${dataSourceId}/validate`, { query });
 }
 
-class QueryStatus extends React.Component {
+class DataSourceValidator extends React.Component {
   constructor(props) {
     super(props);
-    this.getQueryStatus = debounce(getQueryStatus, 500);
+    this.getValidateQuery = debounce(getValidateQuery, 500);
     this.state = {
       valid: false,
       report: '',
@@ -24,7 +24,7 @@ class QueryStatus extends React.Component {
     const queryTextChanged = !prevProps || prevProps.queryText !== this.props.queryText;
     const reportChanged = prevState && prevState.report !== this.state.report;
     if (queryTextChanged || reportChanged) {
-      const p = this.getQueryStatus(this.props.$http, this.props.queryText, this.props.dataSourceId);
+      const p = this.getValidateQuery(this.props.$http, this.props.dataSourceId, this.props.queryText);
       if (p) {
         p.then((response) => { this.setState(response.data); });
       }
@@ -49,16 +49,16 @@ export default function init(ngModule) {
     controllerFunc.prototype.render = function newRender() {
       this.origRender();
       const container = document.querySelector('.editor__control div');
-      let status = document.querySelector('#stmo_query_status');
+      let status = document.querySelector('#stmo_datasource_validator');
       if (!status) {
         status = document.createElement('div');
-        status.id = 'stmo_query_status';
+        status.id = 'stmo_datasource_validator';
       } else {
         container.removeChild(status);
       }
       container.appendChild(status);
       render(
-        <QueryStatus queryText={this.props.queryText} dataSourceId={this.dataSource.id} $http={$http} />,
+        <DataSourceValidator queryText={this.props.queryText} dataSourceId={this.dataSource.id} $http={$http} />,
         status,
       );
     };
