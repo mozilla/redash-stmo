@@ -15,10 +15,6 @@ requires = [
     "six",
     "pyhive",
     "pgsanity",
-    # Require PyAthena bigger than 1.2
-    # originally in our fork:
-    # https://github.com/mozilla/redash/commit/86f5c2fb23057d6b25a1750a93e22cc381ea1320
-    "PyAthena>=1.2.0",
 ]
 description-file = "README.rst"
 classifiers=[
