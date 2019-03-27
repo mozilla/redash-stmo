@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2019.3.1
+--------
+
+:date: 2019-03-27
+
+* Reverted PyAthena version pinning again.
+
 2019.3.0
 --------
 
