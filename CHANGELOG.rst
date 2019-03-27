@@ -1,6 +1,17 @@
 Changelog
 =========
 
+2019.3.0
+--------
+
+:date: 2019-03-27
+
+* Refactoring some of the tests.
+
+* Add query validation for Postgres and Bigquery data sources.
+
+* Port REMOTE_GROUPS feature from Redash fork.
+
 2019.2.2
 --------
 
