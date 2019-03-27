@@ -12,7 +12,7 @@ Or as it should have been called: *St. Moredash* ;)
 .. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/mozilla/redash-stmo
 
-.. image:: https://img.shields.io/badge/calver-YY.M.PATCH-22bfda.svg
+.. image:: https://img.shields.io/badge/calver-YYYY.M.PATCH-22bfda.svg
    :target: https://calver.org/
    :alt: CalVer - Timely Software Versioning
 
