@@ -68,20 +68,20 @@ class STMOPrestoCursor(presto.Cursor):
             rep = [
                 column["typeArguments"][0]
             ] * len(data)
-            return (
+            return [
                 self._format_data(c, d)
                 for c, d in zip(rep, data)
-            )
+            ]
 
         # maps should have their value types associated with each value
         # (note that keys are always strings), but keep the tuple format
         # for backward-compatibility
         elif type == "map":
             value_type = column["typeArguments"][1]
-            return (
+            return [
                 (k, self._format_data(value_type, v))
                 for k, v in six.iteritems(data)
-            )
+            ]
 
         else:
             # unknown type, don't process it
