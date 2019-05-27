@@ -44,6 +44,7 @@ setup(
             "dockerflow = redash_stmo.dockerflow:extension",
             "handler_queryresults = redash_stmo.handlers.query_results.extension:extension",
             "handler_remote_user_auth = redash_stmo.handlers.authentication.remote_user_auth:extension",
+            "queryrunner_big_query = redash_stmo.query_runner.big_query:extension",
             "queryrunner_presto = redash_stmo.query_runner.presto:extension",
             "integrations_iodide = redash_stmo.integrations.iodide.extension:extension",
         ],

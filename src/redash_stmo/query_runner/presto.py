@@ -3,8 +3,8 @@ import logging
 
 import six
 from pyhive import presto
-from redash.query_runner.presto import Presto
 from redash.query_runner import register
+from redash.query_runner.presto import Presto
 
 
 logger = logging.getLogger(__name__)
@@ -14,6 +14,10 @@ class STMOPresto(Presto):
     """
     A custom Presto query runner. Currently empty.
     """
+    @classmethod
+    def type(cls):
+        """Overrides the name to match the name of the parent query runner"""
+        return 'presto'
 
 
 class STMOConnection(presto.Connection):
@@ -30,6 +34,7 @@ class STMOPrestoCursor(presto.Cursor):
     A custom Presto cursor that processes the data after it has been
     handled by the parent cursor to apply various transformations.
     """
+
     def _process_response(self, response):
         super(STMOPrestoCursor, self)._process_response(response)
         self._data = self._process_data()

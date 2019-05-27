@@ -1,7 +1,9 @@
 FROM mozilla/redash:rc
 
 ENV PATH="/home/redash/.local/bin:$PATH" \
-	PYTHONUNBUFFERED=0
+	PYTHONUNBUFFERED=0 \
+    REDASH_HOST="localhost:5000"
+
 
 USER root
 RUN apt-get update -yq \

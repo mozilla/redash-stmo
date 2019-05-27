@@ -9,3 +9,5 @@ dist
 *.pyc
 .DS_Store
 .pytest_cache/
+node_modules
+version.json

@@ -19,6 +19,7 @@ services:
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       REDASH_BACKEND: "http://server:5000"
+      REDASH_HOST: "localhost:5000"
       DEV_SERVER_HOST: "0.0.0.0"
       REDASH_IODIDE_URL:
       REDASH_IODIDE_NOTEBOOK_API_URL:
