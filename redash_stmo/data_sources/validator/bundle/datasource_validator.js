@@ -16,6 +16,7 @@ class DataSourceValidator extends React.Component {
       report: '',
     };
   }
+
   componentDidMount() {
     this.componentDidUpdate();
   }
