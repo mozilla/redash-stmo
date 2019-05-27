@@ -1,6 +1,24 @@
 Changelog
 =========
 
+2019.5.0
+--------
+
+:date: 2019-05-27
+
+* Fix tiny webpack error.
+
+* Add Mozilla's Community Participation Guidelines as the Code of Conduct.
+
+2019.3.2
+--------
+
+:date: 2019-04-02
+
+(this version should have been 2019.4.0 but was accidentally versioned)
+
+* Use lists instead of generator in Presto query runner.
+
 2019.3.1
 --------
 
