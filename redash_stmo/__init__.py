@@ -3,4 +3,4 @@
 # file, you can obtain one at http://mozilla.org/MPL/2.0/.
 """Extensions to Redash by Mozilla"""
 
-__version__ = "2019.5.0"
+__version__ = "2019.6.0"
