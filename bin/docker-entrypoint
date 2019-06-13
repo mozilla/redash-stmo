@@ -23,7 +23,7 @@ rm -rf /app/client/app/extensions/*
 /app/bin/bundle-extensions
 
 server() {
-  exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
+  exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w "${REDASH_WEB_WORKERS:-4}" redash.wsgi:app
 }
 
 devserver() {
@@ -50,19 +50,19 @@ tests() {
   if [ $# -eq 0 ]; then
     TEST_ARGS=/extension
   else
-    TEST_ARGS=$@
+    TEST_ARGS="$*"
   fi
-  pytest $TEST_ARGS
+  pytest "$TEST_ARGS"
 }
 
 case "$1" in
   tests)
 	shift
-	tests $@
+	tests "$*"
 ;;
   ci)
 	shift
-	tests $@
+	tests "$*"
   bash <(curl -s https://codecov.io/bash) -s /tmp
 ;;
   create_tables)
@@ -71,17 +71,17 @@ case "$1" in
 ;;
   manage)
 	shift
-	exec /app/manage.py $*
+	exec /app/manage.py "$*"
 ;;
   server)
 	shift
-	server $@
+	server "$*"
 ;;
   devserver)
 	shift
-	devserver $@
+	devserver "$*"
 ;;
   *)
-	exec "$@"
+	exec "$*"
 ;;
 esac
