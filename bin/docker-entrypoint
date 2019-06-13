@@ -43,8 +43,18 @@ create_tables() {
   popd
 }
 
-tests() {
+
+create_test_tables() {
+  use_test_database
+  create_tables
+}
+
+use_test_database() {
   export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
+}
+
+tests() {
+  use_test_database
   create_tables
 
   if [ $# -eq 0 ]; then
@@ -64,6 +74,10 @@ case "$1" in
 	shift
 	tests "$*"
   bash <(curl -s https://codecov.io/bash) -s /tmp
+;;
+  create_test_tables)
+	shift
+	create_test_tables
 ;;
   create_tables)
 	shift

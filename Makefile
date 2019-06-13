@@ -37,6 +37,7 @@ test_database:
 	docker-compose start postgres
 	docker-compose run --rm server /extension/bin/wait-for-it.sh postgres:5432 -- echo "Postgres started"
 	docker-compose run --rm postgres psql -U postgres -h postgres -c "create database tests;" || echo "Error while creating tests database"
+	docker-compose run --rm server create_test_tables
 
 test: build test_database
 	docker-compose run --rm server tests
