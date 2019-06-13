@@ -96,6 +96,6 @@ case "$1" in
 	devserver "$*"
 ;;
   *)
-	exec "$*"
+	exec $*
 ;;
 esac

@@ -8,6 +8,9 @@ RUN pip uninstall -qy redash-stmo \
 	&& pip3 install flit
 RUN mkdir -p /home/redash/.cache /home/redash/.local /app/node_modules && \
 	chown -R redash /home/redash/.cache /home/redash/.local /app/node_modules
+
+COPY . /extension
+RUN chown -R redash /extension
 USER redash
 
 ENTRYPOINT ["/extension/bin/docker-entrypoint"]
