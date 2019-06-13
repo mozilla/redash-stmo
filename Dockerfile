@@ -1,5 +1,7 @@
 FROM mozilla/redash:rc
 
+ENV PATH="/home/redash/.local/bin:$PATH"
+
 USER root
 RUN apt-get update && apt-get install -y python3 python3-pip libecpg-dev
 RUN pip uninstall -qy redash-stmo \
