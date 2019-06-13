@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2019.6.0
+--------
+
+:date: 2019-06-12
+
+* Use improved extension layout from upstream, splitting extensions into Python
+  extensions, webpack bundles and periodic Celery tasks.
+
 2019.5.0
 --------
 
