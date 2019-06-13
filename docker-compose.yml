@@ -23,7 +23,7 @@ services:
       REDASH_BACKEND: "http://server:5000"
       DEV_SERVER_HOST: "0.0.0.0"
   worker:
-    image: mozilla/redash:latest
+    image: mozilla/redash:rc
     command: scheduler
     depends_on:
       - server
