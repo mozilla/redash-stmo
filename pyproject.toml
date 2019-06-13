@@ -40,7 +40,8 @@ test = [
     "pytest",
     "mock",
     "pytest-cov",
-    "pytest-flake8",
+    # As long as the upstream Redash repo installs pytest<3.5:
+    "pytest-flake8<1.0.1",
 ]
 dev = [
     "watchdog",
