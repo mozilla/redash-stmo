@@ -15,7 +15,7 @@ fi
 
 pushd /extension
 # always install inside the running container
-PIP_QUIET=true flit install --user --python=/usr/bin/python --symlink --extras=test,dev
+PIP_QUIET=true flit install --user --python="$(command -v python)" --symlink --extras=test,dev
 popd
 
 # Trash the existing and copy the current extension bundles again
