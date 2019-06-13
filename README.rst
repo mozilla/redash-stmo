@@ -93,8 +93,7 @@ Mozilla staff, please run the following::
 
     make build
 
-.. admonition:: Behind the scenes
-
+Behind the scenes
    This will run ``docker-compose build --pull`` which will pull updates to
    the Docker images used by the docker-compose setup, including the Redash,
    Redis and Postgres images.
@@ -111,13 +110,12 @@ Redash/redash-stmo setup:
 
 This uses Redash's own ability and redash-stmo is just set up to reuse it.
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  This will run docker-compose to create the server container that is
+  running the Redash Python server and in effect the Redis and Postgres
+  containers, too.
 
-   This will run docker-compose to create the server container that is
-   running the Redash Python server and in effect the Redis and Postgres
-   containers, too.
-
-   It will then initialize the Postgres tables needed for Redash.
+  It will then initialize the Postgres tables needed for Redash.
 
 Install npm modules
 ~~~~~~~~~~~~~~~~~~~
@@ -126,16 +124,15 @@ Then we'll install the Redash npm modules inside the server container::
 
     make node_modules
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  This will run ``npm install`` inside the server in the ``/app`` directory,
+  which is the directory with Redash's code from the Redash Docker base
+  image.
 
-   This will run ``npm install`` inside the server in the ``/app`` directory,
-   which is the directory with Redash's code from the Redash Docker base
-   image.
-
-   NOTE, the redash-stmo development setup mounts the ``/app/node_modules``
-   directory as a separate Docker volume, that will be maintained by Docker
-   and won't show up in or transfer to the host machine where Docker is
-   running.
+  NOTE, the redash-stmo development setup mounts the ``/app/node_modules``
+  directory as a separate Docker volume, that will be maintained by Docker
+  and won't show up in or transfer to the host machine where Docker is
+  running.
 
 Start the containers
 ~~~~~~~~~~~~~~~~~~~~
@@ -145,13 +142,12 @@ To start the whole set of Docker containers for a working environment
 
     make up
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  This is pretty simply running ``docker-compose up``, to launch all
+  containers of the redash-stmo Docker setup.
 
-   This is pretty simply running ``docker-compose up``, to launch all
-   containers of the redash-stmo Docker setup.
-
-   NOTE: This **requires** first installing npm modules inside the container
-   above and creating the database as well!
+  NOTE: This **requires** first installing npm modules inside the container
+  above and creating the database as well!
 
 Run webpack devserver
 ~~~~~~~~~~~~~~~~~~~~~
@@ -170,22 +166,21 @@ open a second terminal and **additionally run**::
 
     make devserver
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  This will run the webpack devserver in another instance of the server
+  container (not the same as when running ``make up``) and runs a script
+  that listens for files changes to ``.js`` and ``.jsx`` files in the
+  ``/extension`` directory.
 
-   This will run the webpack devserver in another instance of the server
-   container (not the same as when running ``make up``) and runs a script
-   that listens for files changes to ``.js`` and ``.jsx`` files in the
-   ``/extension`` directory.
+  When changes are detected, it'll automatically run Redash's
+  ``bundle-extensions`` script that does the heavy lifting of copying
+  the changed extension files into the ``/app/client/app/extensions``
+  directory, which triggers the webpack devserver to recompile the
+  client application bundle.
 
-   When changes are detected, it'll automatically run Redash's
-   ``bundle-extensions`` script that does the heavy lifting of copying
-   the changed extension files into the ``/app/client/app/extensions``
-   directory, which triggers the webpack devserver to recompile the
-   client application bundle.
-
-   NOTE: This **requires** opening the Redash instance via
-   http://localhost:8080/ instead of http://localhost:5000/ to go through
-   the webpack devserver.
+  NOTE: This **requires** opening the Redash instance via
+  http://localhost:8080/ instead of http://localhost:5000/ to go through
+  the webpack devserver.
 
 
 Start shell
@@ -196,36 +191,35 @@ server container, you can create a bash shell by running::
 
     make bash
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  Any changes you make here outside the ``/extension`` directory
+  (which is mounted as a Docker volume with the current working directory on
+  the Docker host machine) and the following directores are not persisted.
 
-   Any changes you make here outside the ``/extension`` directory
-   (which is mounted as a Docker volume with the current working directory on
-   the Docker host machine) and the following directores are not persisted.
+  List of directories inside the container that are mounted as Docker volumes:
 
-   List of directories inside the container that are mounted as Docker volumes:
+  ``/extension``
+    Maps the current working directory (where this README.rst is located)
+    on the host machine for developing the extension.
 
-   ``/extension``
-     Maps the current working directory (where this README.rst is located)
-     on the host machine for developing the extension.
+  ``/home/redash/.cache``
+    Used by pip and other scripts,
 
-   ``/home/redash/.cache``
-     Used by pip and other scripts,
+  ``/app/client/dist``
+    Directory to retain webpack build results, so webpack builds don't take
+    as long on consecutive runs.
 
-   ``/app/client/dist``
-     Directory to retain webpack build results, so webpack builds don't take
-     as long on consecutive runs.
+  ``/home/redash/.local``
+    Directory for "user-installed" Python packages. If you'd like you can
+    easily install additonal Python packages with the Docker container user
+    Redash using ``pip install --user <package>``. Installed scripts from
+    those packages will be found under ``/home/redash/.local/bin`` but
+    are also automatically added to ``PATH``.
 
-   ``/home/redash/.local``
-     Directory for "user-installed" Python packages. If you'd like you can
-     easily install additonal Python packages with the Docker container user
-     Redash using ``pip install --user <package>``. Installed scripts from
-     those packages will be found under ``/home/redash/.local/bin`` but
-     are also automatically added to ``PATH``.
-
-   ``/app/node_modules``
-     Directory for npm modules, that are installed when running ``npm install``
-     inside of ``/app`` in the container. Retained to make use of native npm
-     caching between consecutive runs.
+  ``/app/node_modules``
+    Directory for npm modules, that are installed when running ``npm install``
+    inside of ``/app`` in the container. Retained to make use of native npm
+    caching between consecutive runs.
 
 Run tests
 ~~~~~~~~~
@@ -245,36 +239,35 @@ To run the tests (from the host machine) run::
 This will automatically run the ``test_database`` Make task before running
 the tests.
 
-.. admonition:: Behind the scenes
+Behind the scenes
+  When launching the tests runner it'll the regular server container,
+  but also set the ``REDASH_DATABASE_URL`` environment variable to the
+  test database to prevent overwriting any data that you added to the
+  database the regular Redash interface (e.g. data sources, queries etc).
 
-   When launching the tests runner it'll the regular server container,
-   but also set the ``REDASH_DATABASE_URL`` environment variable to the
-   test database to prevent overwriting any data that you added to the
-   database the regular Redash interface (e.g. data sources, queries etc).
+  By default it uses `pytest <https://docs.pytest.org/>`_ to run
+  the Python tests in ``/extension``, with a number of parameters as
+  defined in the ``pytest.ini``.
 
-   By default it uses `pytest <https://docs.pytest.org/>`_ to run
-   the Python tests in ``/extension``, with a number of parameters as
-   defined in the ``pytest.ini``.
+  If you'd like to add additional parameters to pytest simply appened the
+  command line arguments in ``pytest.ini``.
 
-   If you'd like to add additional parameters to pytest simply appened the
-   command line arguments in ``pytest.ini``.
+  Alternatively, e.g. if you'd like to use `pdb <https://docs.python.org/3/library/pdb.html>`_ to debug a test, do this:
 
-   Alternatively, e.g. if you'd like to use `pdb <https://docs.python.org/3/library/pdb.html>`_ to debug a test, do this:
+  create the test database from the host machine
+    ``make test_database``
 
-   create the test database from the host machine
-     ``make test_database``
+  start a Bash shell in the container
+    ``make bash``
 
-   start a Bash shell in the container
-     ``make bash``
+  set the ``REDASH_DATABASE_URL`` env var in the container
+    ``export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"``
 
-   set the ``REDASH_DATABASE_URL`` env var in the container
-     ``export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"``
+  change direcotry to extensio code
+    ``cd /extension``
 
-   change direcotry to extensio code
-     ``cd /extension``
-
-   run the tests with whatever parameter
-     ``pytest -vvv --pdb``
+  run the tests with whatever parameter
+    ``pytest -vvv --pdb``
 
 Issues & questions
 ------------------
