@@ -8,7 +8,7 @@ class TestDatasourceLink(BaseTestCase):
 
     def setUp(self):
         super(TestDatasourceLink, self).setUp()
-        self.patched_query_runners = self._setup_mock('redash_stmo.data_sources.link.query_runners')
+        self.patched_query_runners = self._setup_mock('redash_stmo.data_sources.link.extension.query_runners')
         self.patched_query_runners.return_value = {}
 
     def _setup_mock(self, function_to_patch):
