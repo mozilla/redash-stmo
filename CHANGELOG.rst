@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2019.6.1
+--------
+
+:date: 2019-06-13
+
+* Fix package layout issues with regard to new extension API.
+
+* Various fixes to development workflow.
+
 2019.6.0
 --------
 
