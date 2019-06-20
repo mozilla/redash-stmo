@@ -10,13 +10,11 @@ services:
       - "5000:5000"
     volumes:
       - $PWD:/extension
-      - cache:/home/redash/.cache:delegated
+      - home_cache:/home/redash/.cache:delegated
       - client_dist:/app/client/dist:delegated
       - python_local:/home/redash/.local:delegated
       - node_modules:/app/node_modules:delegated
     environment:
-      PYTHONPATH: /app
-      PYTHONUNBUFFERED: 0
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
@@ -43,5 +41,5 @@ services:
 volumes:
   node_modules:
   python_local:
-  cache:
+  home_cache:
   client_dist:

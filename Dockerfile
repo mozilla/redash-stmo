@@ -1,11 +1,15 @@
 FROM mozilla/redash:rc
 
-ENV PATH="/home/redash/.local/bin:$PATH"
+ENV PATH="/home/redash/.local/bin:$PATH" \
+	PYTHONUNBUFFERED=0
 
 USER root
-RUN apt-get update && apt-get install -y python3 python3-pip libecpg-dev
+RUN apt-get update -yq \
+    && apt-get install curl gnupg libecpg-dev -yq \
+    && curl -sL https://deb.nodesource.com/setup_10.x | bash \
+    && apt-get install nodejs -yq
 RUN pip uninstall -qy redash-stmo \
-	&& pip3 install flit
+	&& pip install --pre poetry
 RUN mkdir -p /home/redash/.cache /home/redash/.local /app/node_modules && \
 	chown -R redash /home/redash/.cache /home/redash/.local /app/node_modules
 

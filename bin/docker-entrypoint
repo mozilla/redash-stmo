@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+export PYTHONPATH="/app:/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
+
 # make sure the npm clean command is only removing the content of /app/client/dist
 # and not the directory itself so mounting it works as expected
 if [ -f /app/package.json ]; then
@@ -13,22 +15,34 @@ if [ -f /app/package.json ]; then
     fi
 fi
 
-pushd /extension
-# always install inside the running container
-PIP_QUIET=true flit install --user --python="$(command -v python)" --symlink --extras=test,dev
-popd
+install() {
+  # Remove old metadata installed in previous runs of poetry
+  rm -rf ~/.local/lib/python*/site-packages/redash_stmo*.dist-info
+  # always install inside the running container
+  pushd /extension
+  # make sure the Python we use in Poetry is the one that was installed by the
+  # Python Docker image
+  poetry env use "$(command -v python)"
+  # Install the package and test and development dependencies
+  poetry install -E test -E dev
+  # Enable the Poetry virtualenv
+  source "$(poetry env info -p)/bin/activate"
 
-# Trash the existing and copy the current extension bundles again
-rm -rf /app/client/app/extensions/*
-/app/bin/bundle-extensions
+  # Trash the existing and copy the current extension bundles again
+  rm -rf /app/client/app/extensions/*
+  /app/bin/bundle-extensions
+  popd
+}
 
 server() {
-  exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w "${REDASH_WEB_WORKERS:-4}" redash.wsgi:app
+  install
+  exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
 }
 
 devserver() {
+  install
   # Start a watchdog to copy extension bundles over to /app/client/app/extensions
-  ~/.local/bin/watchmedo shell-command \
+  watchmedo shell-command \
     --patterns="*.js;*.jsx" \
     --ignore-directories \
     --recursive \
@@ -44,35 +58,41 @@ create_tables() {
 }
 
 
+use_test_database() {
+  export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
+}
+
 create_test_tables() {
   use_test_database
   create_tables
 }
 
-use_test_database() {
-  export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
-}
-
 tests() {
   use_test_database
   create_tables
-
+  install
   if [ $# -eq 0 ]; then
     TEST_ARGS=/extension
   else
-    TEST_ARGS="$*"
+    TEST_ARGS=$@
   fi
-  pytest "$TEST_ARGS"
+  which python
+  python -m pytest $TEST_ARGS
+}
+
+manage() {
+  install
+  exec /app/manage.py $*
 }
 
 case "$1" in
   tests)
 	shift
-	tests "$*"
+	tests $@
 ;;
   ci)
 	shift
-	tests "$*"
+	tests $@
   bash <(curl -s https://codecov.io/bash) -s /tmp
 ;;
   create_test_tables)
@@ -85,17 +105,18 @@ case "$1" in
 ;;
   manage)
 	shift
-	exec /app/manage.py "$*"
+	manage $@
 ;;
   server)
 	shift
-	server "$*"
+	server $@
 ;;
   devserver)
 	shift
-	devserver "$*"
+	devserver $@
 ;;
   *)
-	exec $*
+  install
+	exec "$@"
 ;;
 esac

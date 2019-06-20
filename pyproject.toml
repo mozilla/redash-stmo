@@ -1,23 +1,12 @@
 [build-system]
-requires = ["flit"]
-build-backend = "flit.buildapi"
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
 
-[tool.flit.metadata]
-dist-name = "redash-stmo"
-module = "redash_stmo"
-author = "Mozilla Foundation"
-author-email = "dev-webdev@lists.mozilla.org"
-home-page = "https://github.com/mozilla/redash-stmo"
-requires = [
-    "dockerflow>=2018.4.0",
-    "requests",
-    "sqlparse",
-    "six",
-    "pyhive",
-    "pgsanity",
-]
-description-file = "README.rst"
-classifiers=[
+[tool.poetry]
+name = "redash-stmo"
+version = "2019.6.1"
+description = "Extensions to Redash by Mozilla"
+classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment :: Mozilla",
     "Framework :: Django",
@@ -32,23 +21,14 @@ classifiers=[
     "Programming Language :: Python :: 3.6",
     "Topic :: Internet :: WWW/HTTP",
 ]
-license = "MPL 2.0"
+license = "MPL-2.0"
+homepage = "https://github.com/mozilla/redash-stmo"
+authors = ["Mozilla Foundation <dev-webdev@lists.mozilla.org>"]
+readme = "README.rst"
+include = ["AUTHORS.rst", "CHANGELOG.rst", "CODE_OF_CONDUCT.md", "*.js", "*.jsx", "*.css"]
 
-
-[tool.flit.metadata.requires-extra]
-test = [
-    "pytest",
-    "mock",
-    "pytest-cov",
-    # As long as the upstream Redash repo installs pytest<3.5:
-    "flake8<3.6",
-    "pytest-flake8<1.0.1",
-]
-dev = [
-    "watchdog",
-]
-
-[tool.flit.entrypoints."redash.extensions"]
+[tool.poetry.plugins]
+[tool.poetry.plugins."redash.extensions"]
 dockerflow = "redash_stmo.dockerflow:extension"
 datasource_health = "redash_stmo.data_sources.health:extension"
 datasource_link = "redash_stmo.data_sources.link.extension:extension"
@@ -58,9 +38,32 @@ handler_queryresults = "redash_stmo.handlers.query_results.extension:extension"
 handler_remote_user_auth = "redash_stmo.handlers.authentication.remote_user_auth:extension"
 queryrunner_presto = "redash_stmo.query_runner.presto:extension"
 
-[tool.flit.entrypoints."redash.bundles"]
+[tool.poetry.plugins."redash.bundles"]
 datasource_link = "redash_stmo.data_sources.link"
 datasource_version = "redash_stmo.data_sources.version"
 
-[tool.flit.entrypoints."redash.periodic_tasks"]
+[tool.poetry.plugins."redash.periodic_tasks"]
 update_health_status = "redash_stmo.data_sources.health:periodic_task"
+
+[tool.poetry.dependencies]
+python = "^2.7"
+dockerflow = ">=2018.4.0"
+# As long as the upstream Redash repo installs pytest<3.5:
+flake8 = {version = "==3.5.0",optional = true}
+mock = {optional = true,version = "*"}
+pgsanity = "*"
+pyhive = "*"
+pytest = {optional = true,version = "*"}
+pytest-cov = {optional = true,version = "*"}
+pytest-flake8 = {version = "<1.0.1",optional = true}
+requests = "*"
+six = "*"
+sqlparse = "*"
+
+[tool.poetry.dev-dependencies]
+watchdog = "*"
+
+[tool.poetry.extras]
+test = ["flake8", "mock", "pytest", "pytest-cov", "pytest-flake8"]
+dev = ["watchdog"]
+main = ["watchdog"]
