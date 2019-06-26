@@ -35,7 +35,6 @@ install() {
 }
 
 server() {
-  install
   exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
 }
 
