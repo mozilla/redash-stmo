@@ -39,7 +39,12 @@ server() {
   exec /usr/local/bin/gunicorn -b 0.0.0.0:5000 --name redash -w${REDASH_WEB_WORKERS:-4} redash.wsgi:app
 }
 
-devserver() {
+flask_devserver() {
+  export FLASK_DEBUG=1
+  exec /app/manage.py runserver --debugger --reload -h 0.0.0.0
+}
+
+webpack_devserver() {
   install
   # Start a watchdog to copy extension bundles over to /app/client/app/extensions
   watchmedo shell-command \
@@ -107,13 +112,17 @@ case "$1" in
 	shift
 	manage $@
 ;;
+  flask_devserver)
+	shift
+	flask_devserver $@
+;;
   server)
 	shift
 	server $@
 ;;
-  devserver)
+  webpack_devserver)
 	shift
-	devserver $@
+	webpack_devserver $@
 ;;
   *)
   install
