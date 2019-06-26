@@ -9,8 +9,6 @@ services:
       - redis
     ports:
       - "5000:5000"
-    volumes:
-      - $PWD:/extension
     environment:
       PYTHONPATH: /app
       PYTHONUNBUFFERED: 0
