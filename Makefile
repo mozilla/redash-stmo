@@ -1,4 +1,4 @@
-.PHONY: bash build clean database devserver node_modules test_database package release sdist test up wheel
+.PHONY: bash build clean database devserver node_modules test_database test up
 
 bash:
 	docker-compose run --rm server bash
@@ -19,18 +19,7 @@ database:
 	docker-compose run --rm server create_tables
 
 devserver:
-	docker-compose run --publish 8080:8080 server devserver
-
-sdist:
-	python setup.py sdist
-
-wheel:
-	python setup.py bdist_wheel
-
-package: clean sdist wheel
-
-release: package
-	twine upload -s dist/*
+	docker-compose run --publish 8080:8080 server webpack_devserver
 
 test_database:
 	docker-compose up --no-start
