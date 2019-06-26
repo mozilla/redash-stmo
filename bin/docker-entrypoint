@@ -91,8 +91,8 @@ manage() {
 
 case "$1" in
   tests)
-	shift
-	tests $@
+  shift
+  tests $@
 ;;
   ci)
   shift
@@ -103,31 +103,31 @@ case "$1" in
   bash <(curl -s https://codecov.io/bash) -s /tmp
 ;;
   create_test_tables)
-	shift
-	create_test_tables
+  shift
+  create_test_tables
 ;;
   create_tables)
-	shift
-	create_tables
+  shift
+  create_tables
 ;;
   manage)
-	shift
-	manage $@
+  shift
+  manage $@
 ;;
   flask_devserver)
-	shift
-	flask_devserver $@
+  shift
+  flask_devserver $@
 ;;
   server)
-	shift
-	server $@
+  shift
+  server $@
 ;;
   webpack_devserver)
-	shift
-	webpack_devserver $@
+  shift
+  webpack_devserver $@
 ;;
   *)
   install
-	exec "$@"
+  exec "$@"
 ;;
 esac
