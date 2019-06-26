@@ -96,9 +96,6 @@ case "$1" in
 ;;
   ci)
   shift
-  # we need an empty setup.py for Poetry here due to Circle's
-  # Docker-in-Docker system and permissions issues resulting from it
-  touch /extension/setup.py
   tests $@
   bash <(curl -s https://codecov.io/bash) -s /tmp
 ;;
