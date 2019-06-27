@@ -1,1 +1,4 @@
+- Allen Short (@washort)
 - Jannis Leidel (@jezdez)
+- John Karahalis (@openjck)
+- Marina Samuel (@emtwo)
