@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export PYTHONPATH="/app:/extension:/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
+export PYTHONPATH="/app:/extension/src:/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
 
 # make sure the npm clean command is only removing the content of /app/client/dist
 # and not the directory itself so mounting it works as expected
