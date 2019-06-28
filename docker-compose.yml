@@ -20,8 +20,10 @@ services:
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       REDASH_BACKEND: "http://server:5000"
       DEV_SERVER_HOST: "0.0.0.0"
-      REDASH_IODIDE_API_KEY:
-      REDASH_OWN_API_KEY_FOR_IODIDE:
+      REDASH_IODIDE_URL:
+      REDASH_IODIDE_NOTEBOOK_API_URL:
+      REDASH_IODIDE_AUTH_TOKEN:
+      REDASH_IODIDE_DEFAULT_API_KEY:
   worker:
     image: mozilla/redash:rc
     command: scheduler

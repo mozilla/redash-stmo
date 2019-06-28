@@ -6,6 +6,7 @@ import json
 import logging
 import os
 
+from flask import render_template_string
 from redash.models import Query
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.permissions import require_permission
@@ -17,46 +18,51 @@ from redash_stmo.resources import add_resource
 logger = logging.getLogger(__name__)
 
 
-class IodidePostResource(BaseResource):
+class IodideNotebookResource(BaseResource):
     @require_permission("view_query")
     def get(self, query_id):
         query = get_object_or_404(
             Query.get_by_id,
             query_id,
         )
-        url = "https://stage.iodide.nonprod.dataops.mozgcp.net/api/v1/notebooks/"
-        template = open(
-            "/extension/src/redash_stmo/integrations/iodide/iodide-template.iomd",
-            "r"
-        )
-        completed_template = template.read().replace(
-            "[QUERY_ID]",
-            query_id
-        ).replace(
-            "[REDASH_API_KEY]",
-            settings.REDASH_OWN_API_KEY_FOR_IODIDE
-        ).replace(
-            "[TITLE]",
-            query.name
-        )
+        with open(os.path.join(os.path.dirname(__file__), 'iodide-notebook.iomd.j2'), "r") as template:
+            source = template.read()
+            context = {
+                "query_id": query_id,
+                "title": query.name,
+                "api_key": settings.IODIDE_DEFAULT_API_KEY,
+            }
+            rendered_template = render_template_string(source, **context)
         headers = {
-            "Authorization": "Token %s" % settings.IODIDE_API_KEY,
+            "Authorization": "Token %s" % settings.IODIDE_AUTH_TOKEN,
         }
         data = {
-            "owner": "jkarahalis@mozilla.com",
+            "owner": self.current_user.email,
             "title": query.name,
-            "content": completed_template,
+            "content": rendered_template,
         }
-        template.close()
-        result = requests.post(url, headers=headers, data=data)
+        result = requests.post(settings.IODIDE_NOTEBOOK_API_URL, headers=headers, data=data)
         return json.loads(result.content)
+
+
+class IodideSettingsResource(BaseResource):
+    @require_permission("view_query")
+    def get(self):
+        return {
+            "iodideURL": settings.IODIDE_URL,
+        }
 
 
 def extension(app=None):
     logger.info("Loading Iodide integration extension")
     add_resource(
         app,
-        IodidePostResource,
-        "/api/integrations/iodide/<query_id>/create"
+        IodideNotebookResource,
+        "/api/integrations/iodide/<query_id>/notebook",
+    )
+    add_resource(
+        app,
+        IodideSettingsResource,
+        "/api/integrations/iodide/settings",
     )
     logger.info("Loaded Iodide integration extension")

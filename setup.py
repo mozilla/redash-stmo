@@ -13,7 +13,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/x-rst",
     name="redash-stmo",
-    version="2019.6.1",
+    version="2019.6.2",
     description="Extensions to Redash by Mozilla",
     python_requires="==2.*,>=2.7.0",
     project_urls={"homepage": "https://github.com/mozilla/redash-stmo"},
@@ -45,10 +45,12 @@ setup(
             "handler_queryresults = redash_stmo.handlers.query_results.extension:extension",
             "handler_remote_user_auth = redash_stmo.handlers.authentication.remote_user_auth:extension",
             "queryrunner_presto = redash_stmo.query_runner.presto:extension",
+            "integrations_iodide = redash_stmo.integrations.iodide.extension:extension",
         ],
         "redash.bundles": [
             "datasource_link = redash_stmo.data_sources.link",
             "datasource_version = redash_stmo.data_sources.version",
+            "integrations_iodide = redash_stmo.integrations.iodide",
         ],
         "redash.periodic_tasks": [
             "update_health_status = redash_stmo.data_sources.health:periodic_task"
