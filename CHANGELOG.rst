@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2019.6.2
+--------
+
+:date: 2019-06-27
+
+* Add Iodide integration extension, which adds an "Explore in Iodide" button on
+  query pages
+
 2019.6.1
 --------
 
