@@ -41,8 +41,8 @@ class IodideNotebookResource(BaseResource):
             "title": query.name,
             "content": rendered_template,
         }
-        result = requests.post(settings.IODIDE_NOTEBOOK_API_URL, headers=headers, data=data)
-        return json.loads(result.content)
+        response = requests.post(settings.IODIDE_NOTEBOOK_API_URL, headers=headers, data=data)
+        return response.json()
 
 
 class IodideSettingsResource(BaseResource):
