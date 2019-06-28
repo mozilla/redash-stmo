@@ -19,3 +19,13 @@ REMOTE_GROUPS_HEADER = os.environ.get(
 REMOTE_GROUPS_ALLOWED = set_from_string(
     os.environ.get("REDASH_REMOTE_GROUPS_ALLOWED", "")
 )
+
+# Iodide API key for creating new notebooks
+IODIDE_API_KEY = os.environ.get(
+    "REDASH_IODIDE_API_KEY"
+)
+
+# The Redash API key that Iodide uses
+REDASH_OWN_API_KEY_FOR_IODIDE = os.environ.get(
+    "REDASH_OWN_API_KEY_FOR_IODIDE"
+)
