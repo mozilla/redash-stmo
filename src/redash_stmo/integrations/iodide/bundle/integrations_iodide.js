@@ -15,6 +15,9 @@ class IodideButton extends React.Component {
     super(props);
     this.state = { showSpinner: false };
     this.spinnerDelay = 250;
+    this.apiBase = `${window.location.protocol}//${window.location.hostname}${
+      window.location.port ? `:${window.location.port}` : ''
+    }/api/integrations/iodide/`;
   }
 
   componentWillUnmount() {
@@ -32,29 +35,14 @@ class IodideButton extends React.Component {
     // https://stackoverflow.com/a/25050893/4297741
     this.iodideWindow = window.open('', '_blank');
 
-    const apiEndpoint = `${window.location.protocol}//${
-      window.location.hostname
-    }${
-      window.location.port ? `:${window.location.port}` : ''
-    }/api/integrations/iodide/${queryID}/create`;
+    const settingsPromise = this.getHandledFetch(`${this.apiBase}settings`);
+    const notebookPromise = this.getHandledFetch(`${this.apiBase}${queryID}/notebook`);
 
-    fetch(apiEndpoint)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        this.handleError('Bad response from Iodide server');
-      })
-      .catch(() => {
-        this.handleError();
-      })
-      .then((json) => {
-        const notebookURL = `https://stage.iodide.nonprod.dataops.mozgcp.net/notebooks/${
-          json.id
-        }`;
-        this.iodideWindow.location.href = notebookURL;
+    Promise.all([settingsPromise, notebookPromise])
+      .then(([{ iodideURL }, { id }]) => {
+        this.iodideWindow.location.href = `${iodideURL}notebooks/${id}`;
         this.hideSpinner();
-      });
+    });
   };
 
   showSpinner = () => {
@@ -70,7 +58,18 @@ class IodideButton extends React.Component {
     this.setState({ showSpinner: false });
   };
 
-  handleError = (msg = 'Could not create Iodide notebook') => {
+  getHandledFetch = url => (
+    fetch(url).then(this.handleFetchResponse).catch(() => {
+      this.handleFetchError();
+    })
+  );
+
+  handleFetchResponse = (response) => {
+    if (response.status === 200) return response.json();
+    this.handleFetchError('Bad response from Redash server');
+  };
+
+  handleFetchError = (msg = 'Could not create Iodide notebook') => {
     notification.error(msg);
     this.hideSpinner();
     this.iodideWindow.close();

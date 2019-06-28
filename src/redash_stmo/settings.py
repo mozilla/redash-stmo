@@ -20,12 +20,22 @@ REMOTE_GROUPS_ALLOWED = set_from_string(
     os.environ.get("REDASH_REMOTE_GROUPS_ALLOWED", "")
 )
 
-# Iodide API key for creating new notebooks
-IODIDE_API_KEY = os.environ.get(
-    "REDASH_IODIDE_API_KEY"
+# The base URL of Mozilla's private Iodide instance
+IODIDE_URL = os.environ.get(
+    "REDASH_IODIDE_URL"
 )
 
-# The Redash API key that Iodide uses
-REDASH_OWN_API_KEY_FOR_IODIDE = os.environ.get(
-    "REDASH_OWN_API_KEY_FOR_IODIDE"
+# The Iodide API endpoint to hit to create a new notebook
+IODIDE_NOTEBOOK_API_URL = os.environ.get(
+    "REDASH_IODIDE_NOTEBOOK_API_URL"
+)
+
+# The auth token that this extension uses to create new Iodide notebooks
+IODIDE_AUTH_TOKEN = os.environ.get(
+    "REDASH_IODIDE_AUTH_TOKEN"
+)
+
+# The API key that Iodide uses to fetch data from Redash
+IODIDE_DEFAULT_API_KEY = os.environ.get(
+    "REDASH_IODIDE_DEFAULT_API_KEY"
 )
