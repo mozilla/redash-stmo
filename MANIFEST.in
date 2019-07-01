@@ -1,0 +1,5 @@
+include LICENSE CHANGELOG.rst AUTHORS.rst CODE_OF_CONDUCT.md pytest.ini .coveragerc Dockerfile Makefile .dockerignore docker-compose.yml
+recursive-include .circleci *.yml
+recursive-include bin *
+recursive-include tests *.py
+recursive-include src/redash_stmo *.js *.jsx *.less *.css

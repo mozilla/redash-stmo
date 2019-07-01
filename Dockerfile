@@ -9,7 +9,7 @@ RUN apt-get update -yq \
     && curl -sL https://deb.nodesource.com/setup_10.x | bash \
     && apt-get install nodejs -yq
 RUN pip uninstall -qy redash-stmo \
-	&& pip install --pre poetry
+	&& pip install -U pip virtualenv
 RUN mkdir -p /home/redash/.cache /home/redash/.local /app/node_modules && \
 	chown -R redash /home/redash/.cache /home/redash/.local /app/node_modules
 

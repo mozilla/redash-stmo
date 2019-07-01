@@ -16,18 +16,19 @@ if [ -f /app/package.json ]; then
 fi
 
 install() {
-  # Remove old metadata installed in previous runs of poetry
-  rm -rf ~/.local/lib/python*/site-packages/redash_stmo*.dist-info
   # always install inside the running container
   pushd /extension
-  # make sure the Python we use in Poetry is the one that was installed by the
-  # Python Docker image
-  poetry env use "$(command -v python)"
+  # Create/update the virtualenv here, which has explicit access to the
+  # global site-packages, since that's where Redash has installed its
+  # dependencies
+  virtualenv --system-site-packages /home/redash/.cache/venv
+  # shellcheck disable=SC1091
+  source /home/redash/.cache/venv/bin/activate
   # Install the package and test and development dependencies
-  poetry install -E test -E dev
-  # Enable the Poetry virtualenv
-  source "$(poetry env info -p)/bin/activate"
-
+  pip uninstall -y redash-stmo
+  # Install the current working directory (/extension) by egg-linking
+  # (pseudo symlink) and its test and dev extras
+  pip install -e ".[dev,test]"
   # Trash the existing and copy the current extension bundles again
   rm -rf /app/client/app/extensions/*
   /app/bin/bundle-extensions
@@ -61,7 +62,6 @@ create_tables() {
   popd
 }
 
-
 use_test_database() {
   export REDASH_DATABASE_URL="postgresql://postgres@postgres/tests"
 }
@@ -80,7 +80,7 @@ tests() {
   else
     TEST_ARGS=$@
   fi
-  which python
+  pushd /app
   python -m pytest $TEST_ARGS
 }
 

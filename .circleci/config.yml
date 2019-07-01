@@ -41,11 +41,11 @@ jobs:
       - run:
           name: Install deployment tools
           command: |
-            pip install --pre --upgrade setuptools poetry wheel twine
+            pip install --pre --upgrade setuptools wheel twine
       - run:
           name: Create the distribution files
           command: |
-            poetry build -v --no-interaction
+            python setup.py sdist bdist_wheel
       - run:
           name: Check Readme rendering
           command: |
@@ -53,7 +53,7 @@ jobs:
       - run:
           name: Upload to PyPI
           command: |
-            poetry publish --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" --no-interaction
+            twine upload --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" --disable-progress-bar
 
 # Workflows: see https://circleci.com/docs/2.0/workflows/
 workflows:
