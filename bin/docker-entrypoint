@@ -19,13 +19,12 @@ install() {
   # always install inside the running container
   pushd /extension
   # Create/update the virtualenv here, which has explicit access to the
-  # global site-packages, since that's where Redash has installed its
-  # dependencies
-  virtualenv --system-site-packages /home/redash/.cache/venv
+  # global site-packages, since that's where Redash has installed its deps
+  virtualenv --always-copy --system-site-packages /home/redash/.cache/venv
   # shellcheck disable=SC1091
   source /home/redash/.cache/venv/bin/activate
-  # Install the package and test and development dependencies
-  pip uninstall -y redash-stmo
+  # work-around for pip installation issue
+  touch /home/redash/.cache/venv/lib/python2.7/site-packages/easy-install.pth
   # Install the current working directory (/extension) by egg-linking
   # (pseudo symlink) and its test and dev extras
   pip install -e ".[dev,test]"
