@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, you can obtain one at http://mozilla.org/MPL/2.0/.
 import requests
-import json
 import logging
 import os
 
@@ -19,13 +18,17 @@ logger = logging.getLogger(__name__)
 
 
 class IodideNotebookResource(BaseResource):
+    TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'iodide-notebook.iomd.j2')
+
     @require_permission("view_query")
-    def get(self, query_id):
+    def post(self, query_id):
         query = get_object_or_404(
-            Query.get_by_id,
+            Query.get_by_id_and_org,
             query_id,
+            self.current_org,
         )
-        with open(os.path.join(os.path.dirname(__file__), 'iodide-notebook.iomd.j2'), "r") as template:
+
+        with open(self.TEMPLATE_PATH, "r") as template:
             source = template.read()
             context = {
                 "query_id": query_id,
