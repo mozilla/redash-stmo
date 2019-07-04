@@ -36,7 +36,7 @@ class IodideButton extends React.Component {
     this.iodideWindow = window.open('', '_blank');
 
     const settingsPromise = this.getHandledFetch(`${this.apiBase}settings`);
-    const notebookPromise = this.getHandledFetch(`${this.apiBase}${queryID}/notebook`);
+    const notebookPromise = this.getHandledFetch(`${this.apiBase}${queryID}/notebook`, 'POST');
 
     Promise.all([settingsPromise, notebookPromise])
       .then(([{ iodideURL }, { id }]) => {
@@ -58,8 +58,8 @@ class IodideButton extends React.Component {
     this.setState({ showSpinner: false });
   };
 
-  getHandledFetch = url => (
-    fetch(url).then(this.handleFetchResponse).catch(() => {
+  getHandledFetch = (url, method = 'GET') => (
+    fetch(url, {method}).then(this.handleFetchResponse).catch(() => {
       this.handleFetchError();
     })
   );
