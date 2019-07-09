@@ -42,7 +42,7 @@ class IodideButton extends React.Component {
       .then(([{ iodideURL }, { id }]) => {
         this.iodideWindow.location.href = `${iodideURL}notebooks/${id}`;
         this.hideSpinner();
-    });
+      });
   };
 
   showSpinner = () => {
@@ -59,7 +59,7 @@ class IodideButton extends React.Component {
   };
 
   getHandledFetch = (url, method = 'GET') => (
-    fetch(url, {method}).then(this.handleFetchResponse).catch(() => {
+    fetch(url, { method }).then(this.handleFetchResponse).catch(() => {
       this.handleFetchError();
     })
   );
