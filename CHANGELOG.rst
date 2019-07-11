@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2019.7.2
+--------
+
+:date: 2019-07-11
+
+* Inlcude Jinja templates in Python packages
+
+
 2019.6.2
 --------
 
