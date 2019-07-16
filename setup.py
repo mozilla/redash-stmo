@@ -13,7 +13,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/x-rst",
     name="redash-stmo",
-    version="2019.7.2",
+    version="2019.7.3",
     description="Extensions to Redash by Mozilla",
     python_requires="==2.*,>=2.7.0",
     project_urls={"homepage": "https://github.com/mozilla/redash-stmo"},

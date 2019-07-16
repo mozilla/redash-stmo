@@ -12,7 +12,7 @@ information about Iodide, see the help menu.
 
 %% fetch
 // Download the data from Redash and save it to a variable called "dataset"
-json: dataset = https://sql.telemetry.mozilla.org/api/queries/{{ query_id }}/results.json?api_key={{ api_key }}
+json: dataset = {{ redash_url }}api/queries/{{ query_id }}/results.json?api_key={{ api_key }}
 js: https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.33.1/plotly-basic.min.js
 
 %% js
