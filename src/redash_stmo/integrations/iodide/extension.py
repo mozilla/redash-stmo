@@ -7,6 +7,7 @@ import os
 
 from flask import render_template_string
 from redash.models import Query
+from redash.handlers.authentication import base_href
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.permissions import require_permission
 
@@ -31,6 +32,7 @@ class IodideNotebookResource(BaseResource):
         with open(self.TEMPLATE_PATH, "r") as template:
             source = template.read()
             context = {
+                "redash_url": base_href(),
                 "query_id": query_id,
                 "title": query.name,
                 "api_key": settings.IODIDE_DEFAULT_API_KEY,

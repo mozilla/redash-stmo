@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2019.7.3
+--------
+
+:date: 2019-07-16
+
+* Fix bug where the "Explore in Iodide" button creates unusable notebooks if
+  clicked on Redash staging
+* Fix bug where the "Explore in Iodide" button is shown, but non-functional, for
+  queries that have never been saved
+
 2019.7.2
 --------
 

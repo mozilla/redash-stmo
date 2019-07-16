@@ -29,7 +29,7 @@ class IodideButton extends React.Component {
     this.showSpinner();
 
     // Immediately open a window for Iodide. If we open it later, the browser
-    // may consider it to be an unwanted popup. We can close it if we encounter
+    // may consider it to be an unwanted popup. We will close it if we encounter
     // an error.
     //
     // https://stackoverflow.com/a/25050893/4297741
@@ -101,23 +101,29 @@ export default function init(ngModule) {
         this.origRender();
 
         const buttonContainerId = 'explore-in-iodide-container';
+        const queryID = window.location.pathname.match(
+          /\/queries\/(.*?)(\/|$)/,
+        )[1];
+
+        // Don't add the button if it already exists or if the query has never
+        // been saved. The button won't work if the query has never been saved.
+        if (document.getElementById(buttonContainerId) || queryID === 'new') {
+          return;
+        }
+
         const bottomController = document.querySelector('.bottom-controller');
         const queryControlDropdown = bottomController.querySelector(
           'query-control-dropdown',
         );
 
-        if (!document.getElementById(buttonContainerId)) {
-          const iodideButtonContainer = document.createElement('div');
-          iodideButtonContainer.id = buttonContainerId;
-          bottomController.insertBefore(
-            iodideButtonContainer,
-            queryControlDropdown,
-          );
-          const queryID = window.location.href.match(
-            /http.*\/queries\/(.*?)(\/|#|\?|$)/,
-          )[1];
-          render(<IodideButton queryID={queryID} />, iodideButtonContainer);
-        }
+        const iodideButtonContainer = document.createElement('div');
+        iodideButtonContainer.id = buttonContainerId;
+        bottomController.insertBefore(
+          iodideButtonContainer,
+          queryControlDropdown,
+        );
+
+        render(<IodideButton queryID={queryID} />, iodideButtonContainer);
       };
 
       return $delegate;
