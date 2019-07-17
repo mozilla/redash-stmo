@@ -23,7 +23,6 @@ services:
       REDASH_IODIDE_URL:
       REDASH_IODIDE_NOTEBOOK_API_URL:
       REDASH_IODIDE_AUTH_TOKEN:
-      REDASH_IODIDE_DEFAULT_API_KEY:
   worker:
     image: mozilla/redash:rc
     command: scheduler
