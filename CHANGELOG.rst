@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2019.7.4
+--------
+
+:date: 2019-07-17
+
+* Use the correct API key to fetch query result JSON from Iodide
+
 2019.7.3
 --------
 

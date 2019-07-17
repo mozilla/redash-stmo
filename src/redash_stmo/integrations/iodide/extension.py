@@ -35,7 +35,7 @@ class IodideNotebookResource(BaseResource):
                 "redash_url": base_href(),
                 "query_id": query_id,
                 "title": query.name,
-                "api_key": settings.IODIDE_DEFAULT_API_KEY,
+                "api_key": query.api_key,
             }
             rendered_template = render_template_string(source, **context)
         headers = {
