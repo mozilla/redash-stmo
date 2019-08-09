@@ -16,7 +16,7 @@ class DataSourceValidatorResource(BaseResource):
     def validate_pg(self, query_runner, query):
         p = subprocess.Popen("pgsanity", stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         stdout, _ = p.communicate(query + ";")
-        return p.returncode == 0, stdout
+        return p.returncode == 0, stdout, 200
 
     def validate_bigquery(self, query_runner, query):
         jobs = query_runner._get_bigquery_service().jobs()
@@ -41,10 +41,21 @@ class DataSourceValidatorResource(BaseResource):
         if "maximumBillingTier" in query_runner.configuration:
             job_data["configuration"]["query"]["maximumBillingTier"] = query_runner.configuration["maximumBillingTier"]
 
-        insert_response = jobs.insert(projectId=project_id, body=job_data).execute()
+        try:
+            insert_response = jobs.insert(projectId=project_id, body=job_data).execute()
+        except apiclient.errors.HttpError as e:
+            error = json_loads(e.content)['error']['message']
+            return False, error, 200
+        except Exception as e:
+            return False, str(e), 500
+
         if 'errorResult' in insert_response['status']:
-            return False, insert_response['status']['errorResult']
-        return True, "This query will process %s bytes." % (insert_response['statistics']['totalBytesProcessed'],)
+            valid = False
+            response = insert_response['status']['errorResult']['error']['message']
+        else:
+            valid = True
+            response = "This query will process %s bytes." % (insert_response['statistics']['totalBytesProcessed'],)
+        return valid, response, 200
 
     def get_validator(self, query_runner):
         """Return the query validator for the given query runner"""
@@ -74,17 +85,8 @@ class DataSourceValidatorResource(BaseResource):
                 'report': 'You do not have permission to run queries with this data source.'
             }, 403
 
-        try:
-            valid, report = validator(data_source.query_runner, query)
-            return {'valid': valid, 'report': report}, 200
-        except apiclient.errors.HttpError as e:
-            if e.resp.status == 400:
-                error = json_loads(e.content)['error']['message']
-            else:
-                error = e.content
-            return {'valid': False, 'report': error}, 200
-        except Exception as e:
-            return {'valid': False, 'report': str(e)}, 500
+        valid, report, code = validator(data_source.query_runner, query)
+        return {'valid': valid, 'report': report}, code
 
 
 def extension(app):
