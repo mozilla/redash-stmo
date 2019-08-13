@@ -1,6 +1,17 @@
 Changelog
 =========
 
+2019.8.0
+--------
+
+:date: 2019-08-13
+
+* Add a custom BigQuery query runner to add labels for better accounting.
+
+* Automatically redirect requests for /login to /remote_user/login.
+
+* Improve BigQuery validation errors.
+
 2019.7.4
 --------
 
