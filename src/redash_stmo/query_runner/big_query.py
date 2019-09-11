@@ -45,16 +45,13 @@ def parse_annotated_query(query):
 
 
 class BigQuery(RedashBigQuery):
+    # Needed so we can extract annotations from query for job labels
+    should_annotate_query = True
 
     @classmethod
     def type(cls):
         """Overrides the name to match the name of the parent query runner"""
         return 'bigquery'
-
-    @classmethod
-    def annotate_query(cls):
-        """Needed so we can extract annotations from query for job labels"""
-        return True
 
     def __init__(self, *args, **kwargs):
         super(BigQuery, self).__init__(*args, **kwargs)
