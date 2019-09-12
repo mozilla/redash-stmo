@@ -1,7 +1,6 @@
 from redash.models import DataSource
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.permissions import require_access, view_only
-from redash.query_runner import query_runners
 
 from redash_stmo.resources import add_resource
 
@@ -46,7 +45,7 @@ class DataSourceLinkResource(BaseResource):
         try:
             result = {
                 "type_name": data_source.query_runner.name(),
-                "doc_url": data_source.options.get("doc_url", None)
+                "doc_url": DATASOURCE_URLS[data_source.query_runner.type()]
             }
         except Exception as e:
             return {"message": unicode(e), "ok": False}
@@ -55,13 +54,4 @@ class DataSourceLinkResource(BaseResource):
 
 
 def extension(app=None):
-    for runner_type, runner_class in query_runners.items():
-        if runner_type not in DATASOURCE_URLS:
-            continue
-
-        runner_class.add_configuration_property("doc_url", {
-            "type": "string",
-            "title": "Documentation URL",
-            "default": DATASOURCE_URLS[runner_type]})
-
     add_resource(app, DataSourceLinkResource, '/api/data_sources/<data_source_id>/link')
