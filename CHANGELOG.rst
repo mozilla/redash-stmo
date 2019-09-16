@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2019.9.0
+--------
+
+:date: 2019-09-16
+
+* Update annotate_query API after upstream changes.
+
+* Remove use of the config field for data source documentation links.
+
 2019.8.0
 --------
 
