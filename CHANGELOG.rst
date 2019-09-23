@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2019.9.1
+--------
+
+:date: 2019-09-23
+
+* Fix support for Unicode strings in the custom Big Query query runner.
+
+* Run black on the source code and tests.
+
 2019.9.0
 --------
 

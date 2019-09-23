@@ -4,7 +4,6 @@ from redash.models import db, Group
 
 
 class TestQueryResultAPI(BaseTestCase):
-
     def test_query_result_query(self):
         restricted_group = self.factory.create_group(
             org=self.factory.org, type=Group.REGULAR_GROUP, name="restricted"
