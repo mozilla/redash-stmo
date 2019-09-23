@@ -11,8 +11,12 @@ from redash_stmo.data_sources.health import store_health_status, update_health_s
 class TestHealthStatus(BaseTestCase):
     def setUp(self):
         super(TestHealthStatus, self).setUp()
-        self.patched_store_health_status = self._setup_mock('redash_stmo.data_sources.health.store_health_status')
-        self.patched_run_query = self._setup_mock('redash.query_runner.pg.PostgreSQL.run_query')
+        self.patched_store_health_status = self._setup_mock(
+            "redash_stmo.data_sources.health.store_health_status"
+        )
+        self.patched_run_query = self._setup_mock(
+            "redash.query_runner.pg.PostgreSQL.run_query"
+        )
 
         self.patched_run_query.return_value = ("some_data", None)
         os.environ["REDASH_CUSTOM_HEALTH_QUERIES_1"] = ""
@@ -24,7 +28,7 @@ class TestHealthStatus(BaseTestCase):
         return patched_function
 
     def test_store_health_status_sets_correct_keys(self):
-        current_health = redis_connection.get('data_sources:health')
+        current_health = redis_connection.get("data_sources:health")
         self.assertEqual(None, current_health)
 
         DATA_SOURCE = self.factory.create_data_source()
@@ -32,10 +36,14 @@ class TestHealthStatus(BaseTestCase):
         QUERY_FAIL = "SELECT meep"
         SOME_DATA_FAIL = {"a": "b", "foo": "bar", "status": "FAIL"}
         SOME_DATA_SUCCESS = {"a": "b", "foo": "bar", "status": "SUCCESS"}
-        store_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_FAIL, SOME_DATA_FAIL)
-        store_health_status(str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_SUCCESS, SOME_DATA_SUCCESS)
+        store_health_status(
+            str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_FAIL, SOME_DATA_FAIL
+        )
+        store_health_status(
+            str(DATA_SOURCE.id), DATA_SOURCE.name, QUERY_SUCCESS, SOME_DATA_SUCCESS
+        )
 
-        '''
+        """
           The expected format of the cached health data is:
           {
             "<data_source_id>": {
@@ -49,9 +57,9 @@ class TestHealthStatus(BaseTestCase):
             },
             ...
           }
-        '''
+        """
 
-        current_health = json.loads(redis_connection.get('data_sources:health'))
+        current_health = json.loads(redis_connection.get("data_sources:health"))
 
         # There is 1 data source.
         self.assertEqual(1, len(current_health.keys()))
@@ -69,7 +77,9 @@ class TestHealthStatus(BaseTestCase):
         self.assertTrue(QUERY_SUCCESS in current_health[ds_id]["queries"].keys())
         self.assertTrue(QUERY_FAIL in current_health[ds_id]["queries"].keys())
         self.assertEqual(SOME_DATA_FAIL, current_health[ds_id]["queries"][QUERY_FAIL])
-        self.assertEqual(SOME_DATA_SUCCESS, current_health[ds_id]["queries"][QUERY_SUCCESS])
+        self.assertEqual(
+            SOME_DATA_SUCCESS, current_health[ds_id]["queries"][QUERY_SUCCESS]
+        )
         self.assertEqual(SOME_DATA_FAIL["status"], current_health[ds_id]["status"])
 
     def test_health_status_success(self):
@@ -128,15 +138,15 @@ class TestHealthStatus(BaseTestCase):
         self.assertEqual(data_source.query_runner.noop_query, args[2])
 
         # All expected status keys are available.
-        EXPECTED_KEYS = ['status', 'last_run', 'last_run_human', 'runtime']
+        EXPECTED_KEYS = ["status", "last_run", "last_run_human", "runtime"]
         NEW_STATUS = args[3]
         new_status_keys = set(NEW_STATUS.keys())
         self.assertEqual(set(EXPECTED_KEYS), new_status_keys)
 
-        self.assertEqual('FAIL', NEW_STATUS['status'])
-        self.assertIsNotNone(NEW_STATUS['last_run'])
-        self.assertIsNotNone(NEW_STATUS['last_run_human'])
-        self.assertIsNone(NEW_STATUS['runtime'])
+        self.assertEqual("FAIL", NEW_STATUS["status"])
+        self.assertIsNotNone(NEW_STATUS["last_run"])
+        self.assertIsNotNone(NEW_STATUS["last_run_human"])
+        self.assertIsNone(NEW_STATUS["runtime"])
 
     def test_health_status_custom_query(self):
         CUSTOM_QUERY = "select * from table"
