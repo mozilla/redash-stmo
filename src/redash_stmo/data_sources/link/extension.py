@@ -30,22 +30,20 @@ DATASOURCE_URLS = {
         "https://my.vertica.com/docs/8.0.x/HTML/index.htm#Authoring/"
         "ConceptsGuide/Other/SQLOverview.htm%3FTocPath%3DSQL"
         "%2520Reference%2520Manual%7C_____1"
-    )
+    ),
 }
 
 
 class DataSourceLinkResource(BaseResource):
     def get(self, data_source_id):
         data_source = get_object_or_404(
-            DataSource.get_by_id_and_org,
-            data_source_id,
-            self.current_org,
+            DataSource.get_by_id_and_org, data_source_id, self.current_org
         )
         require_access(data_source.groups, self.current_user, view_only)
         try:
             result = {
                 "type_name": data_source.query_runner.name(),
-                "doc_url": DATASOURCE_URLS[data_source.query_runner.type()]
+                "doc_url": DATASOURCE_URLS[data_source.query_runner.type()],
             }
         except Exception as e:
             return {"message": unicode(e), "ok": False}
@@ -54,4 +52,4 @@ class DataSourceLinkResource(BaseResource):
 
 
 def extension(app=None):
-    add_resource(app, DataSourceLinkResource, '/api/data_sources/<data_source_id>/link')
+    add_resource(app, DataSourceLinkResource, "/api/data_sources/<data_source_id>/link")

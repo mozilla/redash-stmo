@@ -14,10 +14,11 @@ class STMOPresto(Presto):
     """
     A custom Presto query runner. Currently empty.
     """
+
     @classmethod
     def type(cls):
         """Overrides the name to match the name of the parent query runner"""
-        return 'presto'
+        return "presto"
 
 
 class STMOConnection(presto.Connection):
@@ -25,6 +26,7 @@ class STMOConnection(presto.Connection):
     A custom Presto connection that uses the custom Presto cursor
     as the default cursor.
     """
+
     def cursor(self):
         return STMOPrestoCursor(*self._args, **self._kwargs)
 
@@ -63,20 +65,14 @@ class STMOPrestoCursor(presto.Cursor):
         if type == "row":
             keys = column["literalArguments"]
             values = [
-                self._format_data(c, d)
-                for c, d in zip(column["typeArguments"], data)
+                self._format_data(c, d) for c, d in zip(column["typeArguments"], data)
             ]
             return tuple(zip(keys, values))
 
         # arrays should have their element types associated with each element
         elif type == "array":
-            rep = [
-                column["typeArguments"][0]
-            ] * len(data)
-            return [
-                self._format_data(c, d)
-                for c, d in zip(rep, data)
-            ]
+            rep = [column["typeArguments"][0]] * len(data)
+            return [self._format_data(c, d) for c, d in zip(rep, data)]
 
         # maps should have their value types associated with each value
         # (note that keys are always strings), but keep the tuple format
@@ -84,8 +80,7 @@ class STMOPrestoCursor(presto.Cursor):
         elif type == "map":
             value_type = column["typeArguments"][1]
             return [
-                (k, self._format_data(value_type, v))
-                for k, v in six.iteritems(data)
+                (k, self._format_data(value_type, v)) for k, v in six.iteritems(data)
             ]
 
         else:
@@ -102,11 +97,11 @@ def stmo_connect(*args, **kwargs):
 
 
 def extension(app):
-    logger.info('Loading Redash Extension for the custom Presto query runner')
+    logger.info("Loading Redash Extension for the custom Presto query runner")
     # Monkeypatch the pyhive.presto.connect function
     presto.connect = stmo_connect
     # and register our own STMOPresto query runner class
     # which automatically overwrites the default presto query runner
     register(STMOPresto)
-    logger.info('Loaded Redash Extension for the custom Presto query runner')
+    logger.info("Loaded Redash Extension for the custom Presto query runner")
     return stmo_connect
