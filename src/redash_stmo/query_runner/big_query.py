@@ -41,7 +41,9 @@ def parse_annotated_query(query):
     if not match:
         return {}
     # Split by comma and colons to create a key/value dict of query annotations
-    return dict(map(lambda s: map(str.strip, s.split(":")), match.group(1).split(",")))
+    return dict(
+        map(lambda s: (x.strip() for x in s.split(":")), match.group(1).split(","))
+    )
 
 
 class BigQuery(RedashBigQuery):
