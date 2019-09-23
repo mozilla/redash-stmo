@@ -53,7 +53,7 @@ class BigQuery(RedashBigQuery):
     @classmethod
     def type(cls):
         """Overrides the name to match the name of the parent query runner"""
-        return 'bigquery'
+        return "bigquery"
 
     def __init__(self, *args, **kwargs):
         super(BigQuery, self).__init__(*args, **kwargs)

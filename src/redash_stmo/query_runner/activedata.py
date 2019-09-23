@@ -14,8 +14,13 @@ import logging
 
 import requests
 
-from redash.query_runner import (TYPE_INTEGER, TYPE_STRING, TYPE_FLOAT,
-                                 BaseSQLQueryRunner, register)
+from redash.query_runner import (
+    TYPE_INTEGER,
+    TYPE_STRING,
+    TYPE_FLOAT,
+    BaseSQLQueryRunner,
+    register,
+)
 from redash.utils import JSONEncoder
 
 
@@ -34,7 +39,7 @@ TYPES_MAP = {
     "object": TYPE_STRING,
     "long": TYPE_STRING,
     "double": TYPE_FLOAT,
-    "integer": TYPE_FLOAT
+    "integer": TYPE_FLOAT,
 }
 
 
@@ -50,21 +55,21 @@ class ActiveData(BaseSQLQueryRunner):
                     "type": "string",
                     "title": "Host URL",
                     "default": "https://activedata.allizom.org:80",
-                    "info": "Please include a port. Do not end with a trailing slash."
+                    "info": "Please include a port. Do not end with a trailing slash.",
                 },
                 "doc_url": {
                     "type": "string",
                     "title": "Documentation URL",
-                    "default": "https://github.com/klahnakoski/ActiveData/tree/dev/docs"
+                    "default": "https://github.com/klahnakoski/ActiveData/tree/dev/docs",
                 },
                 "toggle_table_string": {
                     "type": "string",
                     "title": "Toggle Table String",
                     "default": "_v",
-                    "info": "This string will be used to toggle visibility of tables in the schema browser when editing a query in order to remove non-useful tables from sight."
-                }
+                    "info": "This string will be used to toggle visibility of tables in the schema browser when editing a query in order to remove non-useful tables from sight.",
+                },
             },
-            "required": ["host_url"]
+            "required": ["host_url"],
         }
 
     @classmethod
@@ -82,44 +87,34 @@ class ActiveData(BaseSQLQueryRunner):
     def _get_tables(self, schema):
         query = {
             "from": "meta.columns",
-            "select": [
-                "name",
-                "type",
-                "table"
-            ],
+            "select": ["name", "type", "table"],
             "where": {"not": {"prefix": {"es_index": "meta."}}},
             "limit": 1000,
-            "format": "list"
+            "format": "list",
         }
         results = self.run_jx_query(query, None)
 
-        for row in results['data']:
-            table_name = row['table']
+        for row in results["data"]:
+            table_name = row["table"]
 
             if table_name not in schema:
-                schema[table_name] = {'name': table_name, 'columns': []}
+                schema[table_name] = {"name": table_name, "columns": []}
 
-            schema[table_name]['columns'].append(
-                row['name'] + ' (' + TYPES_MAP.get(row['type'], TYPE_STRING) + ')'
+            schema[table_name]["columns"].append(
+                row["name"] + " (" + TYPES_MAP.get(row["type"], TYPE_STRING) + ")"
             )
 
         return [
-            {
-                'name': table['name'],
-                'columns': sorted(table['columns'])
-            }
+            {"name": table["name"], "columns": sorted(table["columns"])}
             for table in schema.values()
         ]
 
     def run_jx_query(self, query, user):
         data = json.dumps(query, ensure_ascii=False)
-        result = requests.post(
-            self.configuration['host_url'] + "/query",
-            data=data,
-        )
+        result = requests.post(self.configuration["host_url"] + "/query", data=data)
         response = json.loads(result.content)
 
-        if response.get('type') == "ERROR":
+        if response.get("type") == "ERROR":
             cause = self.find_error_cause(response)
             raise Exception(cause)
         return response
@@ -127,20 +122,17 @@ class ActiveData(BaseSQLQueryRunner):
     def run_query(self, annotated_query, user):
         request = {}
         comment, request["sql"] = annotated_query.split("*/", 2)
-        meta = request['meta'] = {}
+        meta = request["meta"] = {}
         for kv in comment.strip()[2:].split(","):
-            k, v = [s.strip() for s in kv.split(':')]
+            k, v = [s.strip() for s in kv.split(":")]
             meta[k] = v
 
-        logger.debug("Send ActiveData a SQL query: %s", request['sql'])
+        logger.debug("Send ActiveData a SQL query: %s", request["sql"])
         data = json.dumps(request, ensure_ascii=False)
-        result = requests.post(
-            self.configuration['host_url'] + "/sql",
-            data=data,
-        )
+        result = requests.post(self.configuration["host_url"] + "/sql", data=data)
         response = json.loads(result.content)
 
-        if response.get('type') == "ERROR":
+        if response.get("type") == "ERROR":
             cause = self.find_error_cause(response)
             return None, cause
 
@@ -164,9 +156,9 @@ class ActiveData(BaseSQLQueryRunner):
                     specific_type = all_types[type] = name
             return specific_type
 
-        for r in table['data']:
+        for r in table["data"]:
             new_row = {}
-            for i, cname in enumerate(table['header']):
+            for i, cname in enumerate(table["header"]):
                 val = r[i]
                 if val is None:
                     continue
@@ -177,28 +169,21 @@ class ActiveData(BaseSQLQueryRunner):
             output.append(new_row)
 
         output_columns = [
-            {
-                "name": full_name,
-                "type": ctype,
-                "friendly_name": full_name
-            }
+            {"name": full_name, "type": ctype, "friendly_name": full_name}
             for cname, types in columns.items()
             for ctype, full_name in types.items()
         ]
 
-        return {
-            'columns': output_columns,
-            'rows': output
-        }
+        return {"columns": output_columns, "rows": output}
 
     def find_error_cause(self, response):
-        while response.get('cause') is not None:
-            cause = response['cause']
+        while response.get("cause") is not None:
+            cause = response["cause"]
             if isinstance(cause, list):
                 response = cause[0]
             else:
                 response = cause
-        return response.get('template')
+        return response.get("template")
 
 
 register(ActiveData)

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def extension(app):
-    logger.info('Loading Redash Extension for Dockerflow')
+    logger.info("Loading Redash Extension for Dockerflow")
     dockerflow = Dockerflow(app, db=db, migrate=migrate, redis=redis_connection)
-    logger.info('Loaded Redash Extension for Dockerflow')
+    logger.info("Loaded Redash Extension for Dockerflow")
     return dockerflow

@@ -19,15 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 class IodideNotebookResource(BaseResource):
-    TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'iodide-notebook.iomd.j2')
+    TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "iodide-notebook.iomd.j2")
 
     @require_permission("view_query")
     def post(self, query_id):
-        query = get_object_or_404(
-            Query.get_by_id_and_org,
-            query_id,
-            self.current_org,
-        )
+        query = get_object_or_404(Query.get_by_id_and_org, query_id, self.current_org)
 
         with open(self.TEMPLATE_PATH, "r") as template:
             source = template.read()
@@ -38,36 +34,28 @@ class IodideNotebookResource(BaseResource):
                 "api_key": query.api_key,
             }
             rendered_template = render_template_string(source, **context)
-        headers = {
-            "Authorization": "Token %s" % settings.IODIDE_AUTH_TOKEN,
-        }
+        headers = {"Authorization": "Token %s" % settings.IODIDE_AUTH_TOKEN}
         data = {
             "owner": self.current_user.email,
             "title": query.name,
             "content": rendered_template,
         }
-        response = requests.post(settings.IODIDE_NOTEBOOK_API_URL, headers=headers, data=data)
+        response = requests.post(
+            settings.IODIDE_NOTEBOOK_API_URL, headers=headers, data=data
+        )
         return response.json()
 
 
 class IodideSettingsResource(BaseResource):
     @require_permission("view_query")
     def get(self):
-        return {
-            "iodideURL": settings.IODIDE_URL,
-        }
+        return {"iodideURL": settings.IODIDE_URL}
 
 
 def extension(app=None):
     logger.info("Loading Iodide integration extension")
     add_resource(
-        app,
-        IodideNotebookResource,
-        "/api/integrations/iodide/<query_id>/notebook",
+        app, IodideNotebookResource, "/api/integrations/iodide/<query_id>/notebook"
     )
-    add_resource(
-        app,
-        IodideSettingsResource,
-        "/api/integrations/iodide/settings",
-    )
+    add_resource(app, IodideSettingsResource, "/api/integrations/iodide/settings")
     logger.info("Loaded Iodide integration extension")
