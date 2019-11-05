@@ -1,21 +1,18 @@
-import os
 import json
+import os
 import time
 
-from redash_stmo import settings
-from redash_stmo.resources import add_resource
-
+from celery.utils.log import get_task_logger
 from flask import jsonify
 from flask_login import login_required
-
-from celery.utils.log import get_task_logger
 from redash import models, redis_connection, statsd_client
-from redash.worker import celery
-from redash.utils import parse_human_time
+from redash.handlers.base import BaseResource, routes
 from redash.monitor import get_status as original_get_status
-from redash.handlers.base import routes, BaseResource
 from redash.permissions import require_super_admin
-
+from redash.utils import parse_human_time
+from redash.worker import celery
+from redash_stmo import settings
+from redash_stmo.resources import add_resource
 
 logger = get_task_logger(__name__)
 

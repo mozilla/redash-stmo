@@ -2,12 +2,10 @@ import subprocess
 
 import apiclient.errors
 from flask import request
-
 from redash import models
 from redash.handlers.base import BaseResource, get_object_or_404
-from redash.permissions import not_view_only, has_access
+from redash.permissions import has_access, not_view_only
 from redash.utils import collect_parameters_from_request, json_loads, mustache_render
-
 from redash_stmo.resources import add_resource
 
 

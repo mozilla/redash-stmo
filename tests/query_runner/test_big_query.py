@@ -1,8 +1,6 @@
 import six
 from redash.query_runner import query_runners
-
 from redash_stmo.query_runner.big_query import BigQuery, parse_annotated_query
-
 from tests import BaseTestCase
 
 

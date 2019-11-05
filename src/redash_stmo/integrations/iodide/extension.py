@@ -1,19 +1,17 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, you can obtain one at http://mozilla.org/MPL/2.0/.
-import requests
 import logging
 import os
 
+import requests
 from flask import render_template_string
-from redash.models import Query
 from redash.handlers.authentication import base_href
 from redash.handlers.base import BaseResource, get_object_or_404
+from redash.models import Query
 from redash.permissions import require_permission
-
 from redash_stmo import settings
 from redash_stmo.resources import add_resource
-
 
 logger = logging.getLogger(__name__)
 

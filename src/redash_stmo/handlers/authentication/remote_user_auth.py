@@ -3,7 +3,6 @@ from redash import settings
 from redash.authentication import get_login_url, get_next_path
 from redash.authentication.org_resolving import current_org
 from redash.authentication.remote_user_auth import logger
-
 from redash_stmo import settings as extension_settings
 
 

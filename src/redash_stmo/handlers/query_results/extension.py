@@ -1,7 +1,7 @@
+from redash import models
+from redash.handlers.base import get_object_or_404
 from redash.handlers.query_results import QueryResultResource
 from redash.permissions import require_access, require_permission, view_only
-from redash.handlers.base import get_object_or_404
-from redash import models
 
 from ...resources import add_resource
 from .parser import extract_table_names

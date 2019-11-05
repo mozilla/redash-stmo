@@ -1,6 +1,5 @@
 from pyhive import presto
 from redash.query_runner import query_runners
-
 from redash_stmo.query_runner.presto import STMOPresto, stmo_connect
 
 

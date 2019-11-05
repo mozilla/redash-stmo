@@ -1,12 +1,11 @@
 import json
 import os
+
 import mock
-
-from tests import BaseTestCase
-
 from mock import patch
-from six.moves import reload_module
 from redash_stmo import settings
+from six.moves import reload_module
+from tests import BaseTestCase
 
 
 class TestIodideIntegration(BaseTestCase):

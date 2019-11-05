@@ -1,10 +1,10 @@
 import logging
 import re
 
-from redash.utils import base_url
 from redash.authentication.org_resolving import current_org
 from redash.query_runner import register
 from redash.query_runner.big_query import BigQuery as RedashBigQuery
+from redash.utils import base_url
 
 logger = logging.getLogger(__name__)
 

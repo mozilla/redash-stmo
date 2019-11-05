@@ -2,7 +2,6 @@ import os
 
 from redash.settings.helpers import parse_boolean, set_from_string
 
-
 # Frequency of health query runs in minutes (12 hours by default)
 HEALTH_QUERIES_REFRESH_SCHEDULE = int(
     os.environ.get("REDASH_HEALTH_QUERIES_REFRESH_SCHEDULE", 720)

@@ -1,11 +1,10 @@
-import os
 import json
+import os
+
 import mock
-
-from tests import BaseTestCase
-
 from redash import redis_connection
 from redash_stmo.data_sources.health import store_health_status, update_health_status
+from tests import BaseTestCase
 
 
 class TestHealthStatus(BaseTestCase):

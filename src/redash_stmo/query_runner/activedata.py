@@ -13,16 +13,14 @@ import json
 import logging
 
 import requests
-
 from redash.query_runner import (
+    TYPE_FLOAT,
     TYPE_INTEGER,
     TYPE_STRING,
-    TYPE_FLOAT,
     BaseSQLQueryRunner,
     register,
 )
 from redash.utils import JSONEncoder
-
 
 logger = logging.getLogger(__name__)
 

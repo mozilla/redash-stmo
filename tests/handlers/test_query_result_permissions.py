@@ -1,6 +1,5 @@
+from redash.models import Group, db
 from tests import BaseTestCase
-
-from redash.models import db, Group
 
 
 class TestQueryResultAPI(BaseTestCase):

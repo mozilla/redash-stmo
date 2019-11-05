@@ -1,5 +1,5 @@
-from tests import BaseTestCase
 from redash_stmo.data_sources.link.extension import DATASOURCE_URLS
+from tests import BaseTestCase
 
 
 class TestDatasourceLink(BaseTestCase):

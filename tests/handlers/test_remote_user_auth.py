@@ -2,7 +2,6 @@ import mock
 from flask import url_for
 from redash import settings
 from redash.authentication.org_resolving import current_org
-
 from redash_stmo import settings as extension_settings
 from tests import BaseTestCase
 

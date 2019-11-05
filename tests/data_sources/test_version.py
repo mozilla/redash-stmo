@@ -1,6 +1,6 @@
 import json
-import mock
 
+import mock
 from tests import BaseTestCase
 
 

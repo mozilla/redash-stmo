@@ -1,11 +1,10 @@
 import json
 import logging
 
-from redash_stmo.resources import add_resource
-
-from redash.models import DataSource
 from redash.handlers.base import BaseResource, get_object_or_404
+from redash.models import DataSource
 from redash.permissions import require_access, view_only
+from redash_stmo.resources import add_resource
 
 logger = logging.getLogger(__name__)
 

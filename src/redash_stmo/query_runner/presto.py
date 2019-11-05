@@ -6,7 +6,6 @@ from pyhive import presto
 from redash.query_runner import register
 from redash.query_runner.presto import Presto
 
-
 logger = logging.getLogger(__name__)
 
 
