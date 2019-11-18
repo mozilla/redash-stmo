@@ -8,6 +8,7 @@ services:
       - redis
     ports:
       - "5000:5000"
+    working_dir: /extension
     volumes:
       - $PWD:/extension
       - home_cache:/home/redash/.cache:delegated

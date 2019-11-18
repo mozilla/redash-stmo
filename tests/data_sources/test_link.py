@@ -1,5 +1,7 @@
+import json
+
 from redash_stmo.data_sources.link.extension import DATASOURCE_URLS
-from tests import BaseTestCase
+from tests import BaseTestCase, authenticate_request
 
 
 class TestDatasourceLink(BaseTestCase):
@@ -7,11 +9,11 @@ class TestDatasourceLink(BaseTestCase):
         admin = self.factory.create_admin()
         data_source = self.factory.create_data_source()
 
-        rv = self.make_request(
-            "get", "/api/data_sources/{}/link".format(data_source.id), user=admin
-        )
+        authenticate_request(self.client, admin)
+        rv = self.client.get("/api/data_sources/{}/link".format(data_source.id))
         self.assertEqual(200, rv.status_code)
+        rv_json = json.loads(rv.data)
         self.assertEqual(
-            rv.json["message"]["type_name"], data_source.query_runner.name()
+            rv_json["message"]["type_name"], data_source.query_runner.name()
         )
-        self.assertEqual(rv.json["message"]["doc_url"], DATASOURCE_URLS["pg"])
+        self.assertEqual(rv_json["message"]["doc_url"], DATASOURCE_URLS["pg"])

@@ -1,5 +1,5 @@
 from redash.models import Group, db
-from tests import BaseTestCase
+from tests import BaseTestCase, authenticate_request
 
 
 class TestQueryResultAPI(BaseTestCase):
@@ -36,8 +36,9 @@ class TestQueryResultAPI(BaseTestCase):
             query_text=query.query_text,
             query_hash=query.query_hash,
         )
-        rv = self.make_request(
-            "get", "/api/query_results/{}".format(query_result.id), user=restricted_user
+        authenticate_request(self.client, restricted_user)
+        rv = self.client.get(
+            "/api/query_results/{}".format(query_result.id)
         )
         self.assertEquals(rv.status_code, 200)
 
@@ -69,5 +70,6 @@ class TestQueryResultAPI(BaseTestCase):
             query_text=query.query_text,
             query_hash=query.query_hash,
         )
-        rv = self.make_request("get", "/api/query_results/{}".format(query_result.id))
+        authenticate_request(self.client, restricted_user)
+        rv = self.client.get("/api/query_results/{}".format(query_result.id))
         self.assertEquals(rv.status_code, 403)

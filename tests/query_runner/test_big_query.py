@@ -20,7 +20,7 @@ class TestBigQueryRunner(BaseTestCase):
             job_data = query_runner._get_job_data(query)
             assert job_data["labels"] == {
                 "App": "redash",
-                "Name": "https://localhost:5000/default/queries/12345",
+                "Name": "localhost:5000/queries/12345",
                 "Query Hash": "56888d88acb5475b95484eeb005f8e5f",
                 "Query ID": "12345",
                 "Queue": "celery",

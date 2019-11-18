@@ -11,19 +11,21 @@ class TestLogin(BaseTestCase):
     def test_custom_login(self, remote_user_login_enabled_mock):
         """Test to make sure requests to /login are directed to the
         remote auth URL"""
-        response = self.get_request("/login", org=self.factory.org)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(
-            response.location,
-            url_for(
-                "remote_user_auth.login",
-                next=url_for(
-                    "redash.index", org_slug=current_org.slug, _external=False
+        test_url = "/login"
+        with self.app.test_request_context(test_url):
+            response = self.client.get(test_url)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(
+                response.location,
+                url_for(
+                    "remote_user_auth.login",
+                    next=url_for(
+                        "redash.index", org_slug=current_org.slug, _external=False
+                    ),
+                    org_slug=current_org.slug,
+                    _external=True,
                 ),
-                org_slug=current_org.slug,
-                _external=True,
-            ),
-        )
+            )
 
 
 class TestRemoteAuthGroups(BaseTestCase):
@@ -54,7 +56,5 @@ class TestRemoteAuthGroups(BaseTestCase):
             )
             self.assertTrue(mock_logger.called)
             self.assertEqual(response.status_code, 302)
-            index_url = url_for(
-                "redash.index", org_slug="default", next=next_path, _external=True
-            )
+            index_url = url_for("redash.index", next=next_path, _external=True)
             self.assertEqual(response.location, index_url)

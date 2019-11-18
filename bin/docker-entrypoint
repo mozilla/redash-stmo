@@ -20,6 +20,7 @@ install() {
   pushd /extension
   # Create/update the virtualenv here, which has explicit access to the
   # global site-packages, since that's where Redash has installed its deps
+  rm -rf /home/redash/.cache/venv
   virtualenv --always-copy --system-site-packages /home/redash/.cache/venv
   # shellcheck disable=SC1091
   source /home/redash/.cache/venv/bin/activate
@@ -28,6 +29,7 @@ install() {
   # Install the current working directory (/extension) by egg-linking
   # (pseudo symlink) and its test and dev extras
   pip install -e ".[dev,test]"
+  pip install -U coverage
   # Trash the existing and copy the current extension bundles again
   rm -rf /app/client/app/extensions/*
   /app/bin/bundle-extensions
@@ -96,7 +98,7 @@ case "$1" in
   ci)
   shift
   tests $@
-  bash <(curl -s https://codecov.io/bash) -s /tmp
+  bash <(curl -s https://codecov.io/bash) -Z
 ;;
   create_test_tables)
   shift

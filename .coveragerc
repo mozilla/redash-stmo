@@ -1,7 +1,7 @@
 [run]
 source = redash_stmo
 branch = True
-data_file = /tmp/.coverage
+data_file = /tmp/coverage-data
 
 [report]
 show_missing = True
@@ -9,4 +9,4 @@ omit =
     tests/*
 
 [xml]
-output = /tmp/coverage.xml
+output = /app/coverage.xml

@@ -1,7 +1,7 @@
 import json
 
 import mock
-from tests import BaseTestCase
+from tests import BaseTestCase, authenticate_request
 
 
 class TestDatasourceVersion(BaseTestCase):
@@ -17,6 +17,7 @@ class TestDatasourceVersion(BaseTestCase):
         self.patched_runner_type = self._setup_mock(
             "redash.query_runner.pg.PostgreSQL.type"
         )
+        authenticate_request(self.client, self.admin)
 
     def _setup_mock(self, function_to_patch):
         patcher = mock.patch(function_to_patch)
@@ -34,13 +35,11 @@ class TestDatasourceVersion(BaseTestCase):
             ),
             None,
         )
-        rv = self.make_request(
-            "get",
+        rv = self.client.get(
             "/api/data_sources/{}/version".format(self.data_source.id),
-            user=self.admin,
         )
         self.assertEqual(200, rv.status_code)
-        self.assertEqual(rv.json["version"], expected_version)
+        self.assertEqual(json.loads(rv.data)["version"], expected_version)
 
     def test_gets_postgres_version(self):
         RUNNER_TYPE = "pg"
@@ -78,10 +77,8 @@ class TestDatasourceVersion(BaseTestCase):
             json.dumps({"rows": [{"bad_json": "foo"}]}),
             None,
         )
-        rv = self.make_request(
-            "get",
+        rv = self.client.get(
             "/api/data_sources/{}/version".format(self.data_source.id),
-            user=self.admin,
         )
         self.assertEqual(200, rv.status_code)
-        self.assertEqual(rv.json["version"], None)
+        self.assertEqual(json.loads(rv.data)["version"], None)

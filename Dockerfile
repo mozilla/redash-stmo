@@ -1,9 +1,8 @@
 FROM mozilla/redash:rc
 
 ENV PATH="/home/redash/.local/bin:$PATH" \
-	PYTHONUNBUFFERED=0 \
+    PYTHONUNBUFFERED=0 \
     REDASH_HOST="localhost:5000"
-
 
 USER root
 RUN apt-get update -yq \
@@ -11,9 +10,9 @@ RUN apt-get update -yq \
     && curl -sL https://deb.nodesource.com/setup_10.x | bash \
     && apt-get install nodejs -yq
 RUN pip uninstall -qy redash-stmo \
-	&& pip install -U pip virtualenv
+    && pip install -U pip virtualenv
 RUN mkdir -p /home/redash/.cache /home/redash/.local /app/node_modules && \
-	chown -R redash /home/redash/.cache /home/redash/.local /app/node_modules
+    chown -R redash /home/redash/.cache /home/redash/.local /app/node_modules
 
 COPY . /extension
 RUN chown -R redash /extension

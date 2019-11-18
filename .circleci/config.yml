@@ -1,35 +1,24 @@
-version: 2.0
-
+version: 2
 # Jobs: see https://circleci.com/docs/2.0/jobs-steps/
 jobs:
-  tests:
-    machine:
-      image: circleci/classic:edge
+  test:
+    docker:
+      - image: circleci/python:2.7-buster
     environment:
       COMPOSE_FILE: .circleci/docker-compose.circle.yml
       COMPOSE_PROJECT_NAME: redash
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+          name: Run docker-compose
+          command: docker-compose up -d && sleep 5
       - run:
-          name: Build Docker Images
-          command: |
-            set -x
-            make build
+          name: Create database
+          command: docker-compose run --rm postgres psql -U postgres -h postgres -c "create database tests;" || echo "Error while creating tests database"
       - run:
           name: Run Tests
-          command: |
-            set -x
-            export CI_ENV=`bash <(curl -s https://codecov.io/env)`
-            docker-compose up -d
-            sleep 10
-            docker-compose run --rm postgres psql -U postgres -h postgres -c "create database tests;" || echo "Error while creating tests database"
-            docker-compose run --name tests --rm $(CI_ENV) server ci
+          command: docker-compose run --rm `bash <(curl -s https://codecov.io/env)` server ci
 
   # Runs when the repository is tagged for release; see the workflows section
   # below for trigger logic.
@@ -53,14 +42,14 @@ jobs:
       - run:
           name: Upload to PyPI
           command: |
-            twine upload -u "${FLIT_USERNAME}" -p "${FLIT_PASSWORD}" --disable-progress-bar dist/*
+            twine upload -u "${TWINE_USERNAME}" -p "${TWINE_PASSWORD}" --disable-progress-bar dist/*
 
 # Workflows: see https://circleci.com/docs/2.0/workflows/
 workflows:
   version: 2
-  build:
+  build_and_test:
     jobs:
-      - tests
+      - test
   deploy:
     jobs:
       - deploy:
