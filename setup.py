@@ -50,12 +50,10 @@ setup(
             "handler_remote_user_auth = redash_stmo.handlers.authentication.remote_user_auth:extension",
             "queryrunner_big_query = redash_stmo.query_runner.big_query:extension",
             "queryrunner_presto = redash_stmo.query_runner.presto:extension",
-            "integrations_iodide = redash_stmo.integrations.iodide.extension:extension",
         ],
         "redash.bundles": [
             "datasource_link = redash_stmo.data_sources.link",
             "datasource_version = redash_stmo.data_sources.version",
-            "integrations_iodide = redash_stmo.integrations.iodide",
         ],
         "redash.periodic_tasks": [
             "update_health_status = redash_stmo.data_sources.health:periodic_task"

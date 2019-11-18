@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2019.11.0
+---------
+
+:date: 2019-11-18
+
+* Move Iodide integration into own package "redash-iodide".
+
 2019.9.1
 --------
 

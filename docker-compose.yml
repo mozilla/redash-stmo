@@ -21,9 +21,6 @@ services:
       REDASH_BACKEND: "http://server:5000"
       REDASH_HOST: "localhost:5000"
       DEV_SERVER_HOST: "0.0.0.0"
-      REDASH_IODIDE_URL:
-      REDASH_IODIDE_NOTEBOOK_API_URL:
-      REDASH_IODIDE_AUTH_TOKEN:
   worker:
     image: mozilla/redash:rc
     command: scheduler
