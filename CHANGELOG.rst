@@ -4,9 +4,13 @@ Changelog
 2019.11.0
 ---------
 
-:date: 2019-11-18
+:date: 2019-11-25
 
 * Move Iodide integration into own package "redash-iodide".
+
+* Apply black and isort code formatters.
+
+* Update to Redash v8.
 
 2019.9.1
 --------
