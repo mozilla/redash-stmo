@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/python:2.7-buster
+      - image: circleci/python:3.7-buster
     environment:
       COMPOSE_FILE: .circleci/docker-compose.circle.yml
       COMPOSE_PROJECT_NAME: redash
@@ -24,7 +24,7 @@ jobs:
   # below for trigger logic.
   deploy:
     docker:
-      - image: python:3.6
+      - image: python:3.7
     steps:
       - checkout
       - run:
