@@ -19,7 +19,6 @@ setup(
     },
     setup_requires=['setuptools_scm'],
     description="Extensions to Redash by Mozilla",
-    python_requires="==2.*,>=2.7.0",
     project_urls={"homepage": "https://github.com/mozilla/redash-stmo"},
     author="Mozilla Foundation",
     author_email="dev-webdev@lists.mozilla.org",
