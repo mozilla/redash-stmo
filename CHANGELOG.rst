@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2020.1.0
+--------
+
+:date: 2020-01-10
+
+* Improved Python 3 compatibility.
+
 2019.11.0
 ---------
 
