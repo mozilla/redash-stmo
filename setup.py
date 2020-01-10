@@ -1,5 +1,6 @@
-from setuptools import setup, find_packages
 import os.path
+
+from setuptools import find_packages, setup
 
 readme = ""
 here = os.path.abspath(os.path.dirname(__file__))
@@ -13,11 +14,8 @@ setup(
     long_description=readme,
     long_description_content_type="text/x-rst",
     name="redash-stmo",
-    use_scm_version={
-        'version_scheme': 'post-release',
-        'local_scheme': 'dirty-tag'
-    },
-    setup_requires=['setuptools_scm'],
+    use_scm_version={"version_scheme": "post-release", "local_scheme": "dirty-tag"},
+    setup_requires=["setuptools_scm"],
     description="Extensions to Redash by Mozilla",
     project_urls={"homepage": "https://github.com/mozilla/redash-stmo"},
     author="Mozilla Foundation",
@@ -30,12 +28,11 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Topic :: Internet :: WWW/HTTP",
     ],
     entry_points={
@@ -58,8 +55,8 @@ setup(
             "update_health_status = redash_stmo.data_sources.health:periodic_task"
         ],
     },
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     include_package_data=True,
     install_requires=[
         "dockerflow>=2018.4.0",

@@ -37,9 +37,7 @@ class TestQueryResultAPI(BaseTestCase):
             query_hash=query.query_hash,
         )
         authenticate_request(self.client, restricted_user)
-        rv = self.client.get(
-            "/api/query_results/{}".format(query_result.id)
-        )
+        rv = self.client.get("/api/query_results/{}".format(query_result.id))
         self.assertEquals(rv.status_code, 200)
 
     def test_query_result_query_restrict_access(self):
