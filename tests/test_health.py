@@ -62,19 +62,19 @@ class TestHealthStatus(BaseTestCase):
 
         # There is 1 data source.
         self.assertEqual(1, len(current_health.keys()))
-        self.assertEqual(DATA_SOURCE.id, int(current_health.keys()[0]))
+        self.assertEqual(DATA_SOURCE.id, int(list(current_health.keys())[0]))
 
         # The data source has "metadata", "queries" and "status" keys.
         ds_id = str(DATA_SOURCE.id)
         self.assertEqual(3, len(current_health[ds_id].keys()))
-        self.assertTrue("metadata" in current_health[ds_id].keys())
-        self.assertTrue("queries" in current_health[ds_id].keys())
-        self.assertTrue("status" in current_health[ds_id].keys())
+        self.assertIn("metadata", current_health[ds_id].keys())
+        self.assertIn("queries", current_health[ds_id].keys())
+        self.assertIn("status", current_health[ds_id].keys())
 
         # There are two queries with correct data
         self.assertEqual(2, len(current_health[ds_id]["queries"]))
-        self.assertTrue(QUERY_SUCCESS in current_health[ds_id]["queries"].keys())
-        self.assertTrue(QUERY_FAIL in current_health[ds_id]["queries"].keys())
+        self.assertIn(QUERY_SUCCESS, current_health[ds_id]["queries"].keys())
+        self.assertIn(QUERY_FAIL, current_health[ds_id]["queries"].keys())
         self.assertEqual(SOME_DATA_FAIL, current_health[ds_id]["queries"][QUERY_FAIL])
         self.assertEqual(
             SOME_DATA_SUCCESS, current_health[ds_id]["queries"][QUERY_SUCCESS]
