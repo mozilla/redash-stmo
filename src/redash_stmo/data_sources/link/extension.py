@@ -6,7 +6,7 @@ from six import text_type
 
 
 DATASOURCE_URLS = {
-    "bigquery": "https://cloud.google.com/bigquery/docs/reference/legacy-sql",
+    "bigquery": "https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators",
     "Cassandra": "http://cassandra.apache.org/doc/latest/cql/index.html",
     "dynamodb_sql": "https://dql.readthedocs.io/en/latest/",
     "baseelasticsearch": "https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html",
