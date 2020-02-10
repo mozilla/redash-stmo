@@ -41,12 +41,7 @@ class TestRemoteAuthGroups(BaseTestCase):
         """Test to make sure requests to /login are directed to the
         remote auth URL"""
         next_path = "/"
-        if settings.MULTI_ORG:
-            test_url = url_for(
-                "remote_user_auth.login", org_slug="default", next=next_path
-            )
-        else:
-            test_url = url_for("remote_user_auth.login", next=next_path)
+        test_url = "/remote_user/login?next=%2F"
 
         with self.app.test_request_context(test_url):
             # make sure to call the before_request callback used
