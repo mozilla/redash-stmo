@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export PYTHONPATH="/app:/extension/src:$PYTHONPATH"
+export PYTHONPATH="/app:$PYTHONPATH"
 
 # make sure the npm clean command is only removing the content of /app/client/dist
 # and not the directory itself so mounting it works as expected
@@ -25,7 +25,7 @@ install() {
   # shellcheck disable=SC1091
   source /home/redash/.cache/venv/bin/activate
   # work-around for pip installation issue
-  touch /home/redash/.cache/venv/lib/python2.7/site-packages/easy-install.pth
+  touch /home/redash/.cache/venv/lib/python3.7/site-packages/easy-install.pth
   # Install the current working directory (/extension) by egg-linking
   # (pseudo symlink) and its test and dev extras
   pip install -e ".[dev,test]"
