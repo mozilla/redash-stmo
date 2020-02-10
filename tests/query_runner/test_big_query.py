@@ -1,4 +1,3 @@
-import six
 from redash.query_runner import query_runners
 from redash_stmo.query_runner.big_query import BigQuery, parse_annotated_query
 from tests import BaseTestCase
@@ -41,8 +40,7 @@ class TestBigQueryRunner(BaseTestCase):
             "Task ID": "5b7efa616d474a54874d337cc27f1953",
             "Username": "jezdez",
         }
-        assert parse_annotated_query(six.b(query)) == result
-        assert parse_annotated_query(six.u(query)) == result
+        assert parse_annotated_query(query) == result
 
     def test_parse_annotated_query_no_annotation(self):
         assert parse_annotated_query("") == {}
@@ -55,5 +53,4 @@ class TestBigQueryRunner(BaseTestCase):
             SELECT * FROM users;
         """
         result = {}
-        assert parse_annotated_query(six.b(query)) == result
-        assert parse_annotated_query(six.u(query)) == result
+        assert parse_annotated_query(query) == result

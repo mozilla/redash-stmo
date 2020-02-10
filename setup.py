@@ -63,7 +63,6 @@ setup(
         "pgsanity",
         "pyhive",
         "requests",
-        "six",
         "sqlparse",
     ],
     extras_require={

@@ -21,14 +21,14 @@ from redash.query_runner import (
     register,
 )
 from redash.utils import JSONEncoder
-from six import integer_types, text_type
 
 logger = logging.getLogger(__name__)
 
 TYPES_MAP = {
     bool: TYPE_INTEGER,
+    int: TYPE_INTEGER,
     bytes: TYPE_STRING,
-    text_type: TYPE_STRING,
+    str: TYPE_STRING,
     dict: TYPE_STRING,
     list: TYPE_STRING,
     float: TYPE_FLOAT,
@@ -38,9 +38,6 @@ TYPES_MAP = {
     "double": TYPE_FLOAT,
     "integer": TYPE_FLOAT,
 }
-# adding int+long on py2 and int on py3
-for int_type in integer_types:
-    TYPES_MAP[int_type] = TYPE_INTEGER
 
 
 class ActiveData(BaseSQLQueryRunner):

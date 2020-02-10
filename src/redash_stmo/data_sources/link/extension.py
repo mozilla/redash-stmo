@@ -2,7 +2,6 @@ from redash.handlers.base import BaseResource, get_object_or_404
 from redash.models import DataSource
 from redash.permissions import require_access, view_only
 from redash_stmo.resources import add_resource
-from six import text_type
 
 
 DATASOURCE_URLS = {
@@ -47,7 +46,7 @@ class DataSourceLinkResource(BaseResource):
                 "doc_url": DATASOURCE_URLS[data_source.query_runner.type()],
             }
         except Exception as e:
-            return {"message": text_type(e), "ok": False}
+            return {"message": str(e), "ok": False}
         else:
             return {"message": result, "ok": True}
 

@@ -1,7 +1,6 @@
 import collections
 import logging
 
-import six
 from pyhive import presto
 from redash.query_runner import register
 from redash.query_runner.presto import Presto
@@ -79,7 +78,7 @@ class STMOPrestoCursor(presto.Cursor):
         elif type == "map":
             value_type = column["typeArguments"][1]
             return [
-                (k, self._format_data(value_type, v)) for k, v in six.iteritems(data)
+                (k, self._format_data(value_type, v)) for k, v in data.items()
             ]
 
         else:
