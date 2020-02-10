@@ -7,4 +7,7 @@ def add_resource(app, *args, **kwargs):
     further calls to add_resource() are handled immediately for the given app.
     """
     api.app = app
-    api.add_org_resource(*args, **kwargs)
+    try:
+        api.add_org_resource(*args, **kwargs)
+    except AssertionError:
+        pass
