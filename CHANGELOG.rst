@@ -1,6 +1,21 @@
 Changelog
 =========
 
+2020.2.0
+--------
+
+:date: 2020-02-10
+
+* Fix test issues on Python 3.
+
+* Handle StopIteration correctly on Python 3.
+
+* Update test harness to be running on latest Mozilla rc image.
+
+* Get rid of six.
+
+* Handle AssertionError coming from Flask explicitly.
+
 2020.1.0
 --------
 
