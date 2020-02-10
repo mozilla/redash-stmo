@@ -35,7 +35,7 @@ def extract_from_part(parsed):
                 for x in extract_from_part(item):
                     yield x
             elif item.ttype is Keyword:
-                raise StopIteration
+                return
             else:
                 yield item
         elif item.ttype is Keyword and item.value.upper() == "FROM":
@@ -44,15 +44,18 @@ def extract_from_part(parsed):
 
 def extract_table_identifiers(token_stream):
     for item in token_stream:
-        if isinstance(item, IdentifierList):
-            for identifier in item.get_identifiers():
-                yield identifier.get_real_name()
-        elif isinstance(item, Identifier):
-            yield item.get_real_name()
-        # It's a bug to check for Keyword here, but in the example
-        # above some tables names are identified as keywords...
-        elif item.ttype is Keyword:
-            yield item.value
+        try:
+            if isinstance(item, IdentifierList):
+                for identifier in item.get_identifiers():
+                    yield identifier.get_real_name()
+            elif isinstance(item, Identifier):
+                yield item.get_real_name()
+            # It's a bug to check for Keyword here, but in the example
+            # above some tables names are identified as keywords...
+            elif item.ttype is Keyword:
+                yield item.value
+        except StopIteration:
+            return
 
 
 def extract_table_names(sql):
