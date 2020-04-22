@@ -3,4 +3,10 @@
 # file, you can obtain one at http://mozilla.org/MPL/2.0/.
 """Extensions to Redash by Mozilla"""
 
-__version__ = "2019.7.4"
+from pkg_resources import DistributionNotFound, get_distribution
+
+try:
+    __version__ = get_distribution("redash-stmo").version
+except DistributionNotFound:
+    # package is not installed
+    pass
