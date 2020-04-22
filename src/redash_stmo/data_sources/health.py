@@ -1,8 +1,8 @@
 import json
 import os
 import time
+from datetime import timedelta
 
-from celery.utils.log import get_task_logger
 from flask import jsonify
 from flask_login import login_required
 from redash import models, redis_connection, statsd_client
@@ -10,11 +10,11 @@ from redash.handlers.base import BaseResource, routes
 from redash.monitor import get_status as original_get_status
 from redash.permissions import require_super_admin
 from redash.utils import parse_human_time
-from redash.worker import celery
+from redash.worker import get_job_logger, job
 from redash_stmo import settings
 from redash_stmo.resources import add_resource
 
-logger = get_task_logger(__name__)
+logger = get_job_logger(__name__)
 
 
 class DataSourceHealthResource(BaseResource):
@@ -40,12 +40,10 @@ def store_health_status(data_source_id, data_source_name, query_text, data):
     redis_connection.set(key, json.dumps(cache))
 
 
-@celery.task(
-    name="redash_stmo.health.update_health_status", time_limit=90, soft_time_limit=60
-)
+@job("default", timeout=settings.HEALTH_QUERIES_REFRESH_TIMEOUT)
 def update_health_status():
     for data_source in models.DataSource.query:
-        logger.info(u"task=update_health_status state=start ds_id=%s", data_source.id)
+        logger.info(u"job=update_health_status state=start ds_id=%s", data_source.id)
 
         runtime = None
         query_text = data_source.query_runner.noop_query
@@ -75,7 +73,7 @@ def update_health_status():
             )
             statsd_client.incr("update_health_status.error")
             logger.info(
-                u"task=update_health_status state=error ds_id=%s runtime=%.2f",
+                u"job=update_health_status state=error ds_id=%s runtime=%.2f",
                 data_source.id,
                 time.time() - start_time,
             )
@@ -124,9 +122,9 @@ def extension(app=None):
     add_resource(app, DataSourceHealthResource, "/status/data_sources/health.json")
 
 
-def periodic_task():
-    """Add the update_health_status task to a list of periodic tasks"""
+def scheduled_job():
+    """Add the update_health_status task to a list of scheduled jobs"""
     return {
-        "sig": update_health_status.s(),
-        "schedule": settings.HEALTH_QUERIES_REFRESH_SCHEDULE,
+        "func": update_health_status,
+        "interval": timedelta(minutes=settings.HEALTH_QUERIES_REFRESH_SCHEDULE),
     }

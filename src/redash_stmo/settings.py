@@ -7,6 +7,10 @@ HEALTH_QUERIES_REFRESH_SCHEDULE = int(
     os.environ.get("REDASH_HEALTH_QUERIES_REFRESH_SCHEDULE", 720)
 )
 
+HEALTH_QUERIES_REFRESH_TIMEOUT = int(
+    os.environ.get("REDASH_HEALTH_QUERIES_REFRESH_TIMEOUT", 90)
+)
+
 # When enabled this will match the given remote groups request header with a
 # configured list of allowed user groups.
 REMOTE_GROUPS_ENABLED = parse_boolean(

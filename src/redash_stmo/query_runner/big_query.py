@@ -19,7 +19,7 @@ def parse_annotated_query(query):
 
     E.g. a query that has the annotation on top::
 
-        /* Task ID: 8ccd40c878f59fa69ccf31a72140b208, Query Hash: f6bf37efedbc0a2dfffc1caf5088d86e, Query ID: 12345, Queue: celery, Username: jezdez */
+        /* Task ID: 8ccd40c878f59fa69ccf31a72140b208, Query Hash: f6bf37efedbc0a2dfffc1caf5088d86e, Query ID: 12345, Queue: default, Username: jezdez */
 
         SELECT * FROM users;
 
@@ -28,7 +28,7 @@ def parse_annotated_query(query):
         {
             'Query Hash': 'f6bf37efedbc0a2dfffc1caf5088d86e',
             'Query ID': '12345',
-            'Queue': 'celery',
+            'Queue': 'default',
             'Task ID': '8ccd40c878f59fa69ccf31a72140b208',
             'Username': 'jezdez',
         }

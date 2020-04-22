@@ -60,9 +60,9 @@ Uses Redash's "entrypoints" for discovery
     Python packages that contain additional front-end files for the
     webpack build process, e.g. ``redash_stmo.data_sources.link``.
 
-  ``redash.periodic_tasks``
-    Python callables that return parameters for periodic Celery tasks,
-    e.g. ``redash_stmo.data_sources.health:periodic_task``.
+  ``redash.scheduled_jobs``
+    Python callables that return parameters for scheduled RQ jobs,
+    e.g. ``redash_stmo.data_sources.health:scheduled_job``.
 
 Hooks into Webpack
   Since Redash extensions like redash-stmo can also provide additional Webpack
@@ -138,7 +138,7 @@ Start the containers
 ~~~~~~~~~~~~~~~~~~~~
 
 To start the whole set of Docker containers for a working environment
-(Redash server, Celery workers, Redis, Postgres) all you need to run is this::
+(Redash server, RQ workers, Redis, Postgres) all you need to run is this::
 
     make up
 

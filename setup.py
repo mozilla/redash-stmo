@@ -51,8 +51,8 @@ setup(
             "datasource_link = redash_stmo.data_sources.link",
             "datasource_version = redash_stmo.data_sources.version",
         ],
-        "redash.periodic_tasks": [
-            "update_health_status = redash_stmo.data_sources.health:periodic_task"
+        "redash.scheduled_jobs": [
+            "update_health_status = redash_stmo.data_sources.health:scheduled_job"
         ],
     },
     packages=find_packages("src"),
