@@ -1,4 +1,4 @@
-FROM mozilla/redash:rc
+FROM redash/redash:preview
 
 ENV PATH="/home/redash/.local/bin:$PATH" \
     PYTHONUNBUFFERED=0 \
