@@ -1,12 +1,11 @@
 /* eslint-disable no-console, camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { react2angular } from 'react2angular';
+import { clientConfig } from "@/services/auth";
 
-class DatasourceLink extends React.Component {
+export default class DataSourceLink extends React.Component {
   static propTypes = {
-    clientConfig: PropTypes.object.isRequired,
-    datasourceId: PropTypes.number.isRequired,
+    dataSourceId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -22,13 +21,13 @@ class DatasourceLink extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.datasourceId !== prevProps.datasourceId) {
+    if (this.props.dataSourceId !== prevProps.dataSourceId) {
       this.loadURLData();
     }
   }
 
   loadURLData() {
-    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/link`)
+    fetch(`${clientConfig.basePath}api/data_sources/${this.props.dataSourceId}/link`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -56,9 +55,3 @@ class DatasourceLink extends React.Component {
     );
   }
 }
-
-export default function init(ngModule) {
-  ngModule.component('datasourceLink', react2angular(DatasourceLink, ['datasourceId'], ['clientConfig']));
-}
-
-init.init = true;

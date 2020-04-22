@@ -1,12 +1,11 @@
 /* eslint-disable no-console, camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { react2angular } from 'react2angular';
+import { clientConfig } from "@/services/auth";
 
-class DatasourceVersion extends React.Component {
+export default class DataSourceVersion extends React.Component {
   static propTypes = {
-    clientConfig: PropTypes.object.isRequired,
-    datasourceId: PropTypes.number.isRequired,
+    dataSourceId: PropTypes.number.isRequired,
   }
 
   constructor(props) {
@@ -21,13 +20,13 @@ class DatasourceVersion extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.datasourceId !== prevProps.datasourceId) {
+    if (this.props.dataSourceId !== prevProps.dataSourceId) {
       this.loadURLData();
     }
   }
 
   loadURLData() {
-    fetch(`${this.props.clientConfig.basePath}api/data_sources/${this.props.datasourceId}/version`)
+    fetch(`${clientConfig.basePath}api/data_sources/${this.props.dataSourceId}/version`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -52,9 +51,3 @@ class DatasourceVersion extends React.Component {
     );
   }
 }
-
-export default function init(ngModule) {
-  ngModule.component('datasourceVersion', react2angular(DatasourceVersion, ['datasourceId'], ['clientConfig']));
-}
-
-init.init = true;

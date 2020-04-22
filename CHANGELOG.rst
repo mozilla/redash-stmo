@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2020.4.0
+--------
+
+:date: 2020-04-22
+
+* Remove react2angular dependency in favor of native React components
+  following upstream Angular exodus.
+
 2020.2.0
 --------
 
