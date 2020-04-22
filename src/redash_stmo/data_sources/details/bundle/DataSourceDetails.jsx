@@ -2,8 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { clientConfig } from "@/services/auth";
+import registerComponent from "@/components/DynamicComponent";
 
-export default class DataSourceVersion extends React.Component {
+
+export default class DataSourceDetails extends React.Component {
   static propTypes = {
     dataSourceId: PropTypes.number.isRequired,
   }
@@ -11,6 +13,8 @@ export default class DataSourceVersion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      type_name: '',
+      doc_url: '',
       version: '',
     };
   }
@@ -26,7 +30,7 @@ export default class DataSourceVersion extends React.Component {
   }
 
   loadURLData() {
-    fetch(`${clientConfig.basePath}api/data_sources/${this.props.dataSourceId}/version`)
+    fetch(`${clientConfig.basePath}api/data_sources/${this.props.dataSourceId}/details`)
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -34,20 +38,23 @@ export default class DataSourceVersion extends React.Component {
         return {};
       })
       .catch((error) => {
-        console.error(`Error loading data source version: ${error}`);
+        console.error(`Error loading data source URL: ${error}`);
         return {};
       })
       .then((json) => {
-        this.setState({ version: json.version });
+        const { type_name, doc_url, version } = json.message;
+        this.setState({ type_name, doc_url, version });
       });
   }
 
   render() {
-    if (!this.state.version) {
-      return null;
-    }
     return (
-      <span>{this.state.version}</span>
+      <span>
+        {this.state.type_name} {this.state.version && <span>, version: {this.state.version}</span>}
+        {this.state.doc_url && <span>, <a href={this.state.doc_url}>docs</a></span>}
+      </span>
     );
   }
 }
+
+registerComponent("SelectDataSourceExtra", DataSourceDetails)

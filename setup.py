@@ -35,9 +35,8 @@ setup(
     entry_points={
         "redash.extensions": [
             "datasource_health = redash_stmo.data_sources.health:extension",
-            "datasource_link = redash_stmo.data_sources.link.extension:extension",
+            "datasource_details = redash_stmo.data_sources.details.extension:extension",
             "datasource_validator = redash_stmo.data_sources.validator.extension:extension",
-            "datasource_version = redash_stmo.data_sources.version.extension:extension",
             "dockerflow = redash_stmo.dockerflow:extension",
             "handler_queryresults = redash_stmo.handlers.query_results.extension:extension",
             "handler_remote_user_auth = redash_stmo.handlers.authentication.remote_user_auth:extension",
@@ -45,8 +44,7 @@ setup(
             "queryrunner_presto = redash_stmo.query_runner.presto:extension",
         ],
         "redash.bundles": [
-            "datasource_link = redash_stmo.data_sources.link",
-            "datasource_version = redash_stmo.data_sources.version",
+            "datasource_details = redash_stmo.data_sources.details",
         ],
         "redash.scheduled_jobs": [
             "update_health_status = redash_stmo.data_sources.health:scheduled_job"

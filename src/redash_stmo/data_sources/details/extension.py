@@ -1,3 +1,5 @@
+import json
+import logging
 from redash.handlers.base import BaseResource, get_object_or_404
 from redash.models import DataSource
 from redash.permissions import require_access, view_only
@@ -34,7 +36,43 @@ DATASOURCE_URLS = {
 }
 
 
-class DataSourceLinkResource(BaseResource):
+DATASOURCE_VERSION_PARSE_INFO = {
+    "pg": {"version_query": "SELECT version();", "delimiter": " ", "index": 1},
+    "redshift": {"version_query": "SELECT version();", "delimiter": " ", "index": -1},
+    "mysql": {
+        "version_query": "SELECT VERSION() AS version;",
+        "delimiter": "-",
+        "index": 0,
+    },
+}
+
+logger = logging.getLogger(__name__)
+
+
+def get_data_source_version(query_runner):
+    parse_info = DATASOURCE_VERSION_PARSE_INFO.get(query_runner.type())
+    if parse_info is None:
+        return None
+
+    data, error = query_runner.run_query(parse_info["version_query"], None)
+    if error is not None:
+        logger.error(
+            "Unable to run version query for %s: %s", query_runner.type(), error
+        )
+        return None
+    try:
+        version = json.loads(data)["rows"][0]["version"]
+    except (KeyError, IndexError) as err:
+        logger.exception(
+            "Unable to parse data source version for %s: %s", query_runner.type(), err
+        )
+        return None
+
+    version = version.split(parse_info["delimiter"])[parse_info["index"]]
+    return version
+
+
+class DataSourceDetailsResource(BaseResource):
     def get(self, data_source_id):
         data_source = get_object_or_404(
             DataSource.get_by_id_and_org, data_source_id, self.current_org
@@ -44,6 +82,7 @@ class DataSourceLinkResource(BaseResource):
             result = {
                 "type_name": data_source.query_runner.name(),
                 "doc_url": DATASOURCE_URLS[data_source.query_runner.type()],
+                "version_info": get_data_source_version(data_source.query_runner),
             }
         except Exception as e:
             return {"message": str(e), "ok": False}
@@ -52,4 +91,6 @@ class DataSourceLinkResource(BaseResource):
 
 
 def extension(app=None):
-    add_resource(app, DataSourceLinkResource, "/api/data_sources/<data_source_id>/link")
+    add_resource(
+        app, DataSourceDetailsResource, "/api/data_sources/<data_source_id>/details"
+    )
