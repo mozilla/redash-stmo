@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2020.4.1
+--------
+
+:date: 2020-04-23
+
+* Move the ``redash_stmo.__version__`` to the correct location.
+
+* Combine data source version and link extensions into one.
+
 2020.4.0
 --------
 
@@ -8,6 +17,10 @@ Changelog
 
 * Remove react2angular dependency in favor of native React components
   following upstream Angular exodus.
+
+* Update Docker config to upstream.
+
+* Remove Celery completely in favor of RQ.
 
 2020.2.0
 --------
