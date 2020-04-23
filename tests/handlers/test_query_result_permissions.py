@@ -40,7 +40,7 @@ class TestQueryResultAPI(BaseTestCase):
         )
         authenticate_request(self.client, restricted_user)
         rv = self.client.get("/api/query_results/{}".format(query_result.id))
-        self.assertEquals(rv.status_code, 200)
+        self.assertEqual(rv.status_code, 200)
 
     def test_query_result_query_restrict_access(self):
         restricted_group = self.factory.create_group(
@@ -72,7 +72,7 @@ class TestQueryResultAPI(BaseTestCase):
         )
         authenticate_request(self.client, restricted_user)
         rv = self.client.get("/api/query_results/{}".format(query_result.id))
-        self.assertEquals(rv.status_code, 403)
+        self.assertEqual(rv.status_code, 403)
 
     def test_extract_table_names(self):
         query = """\

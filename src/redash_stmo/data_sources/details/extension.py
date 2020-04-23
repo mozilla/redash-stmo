@@ -81,8 +81,8 @@ class DataSourceDetailsResource(BaseResource):
         try:
             result = {
                 "type_name": data_source.query_runner.name(),
-                "doc_url": DATASOURCE_URLS[data_source.query_runner.type()],
-                "version_info": get_data_source_version(data_source.query_runner),
+                "doc_url": DATASOURCE_URLS.get(data_source.query_runner.type(), None),
+                "version": get_data_source_version(data_source.query_runner),
             }
         except Exception as e:
             return {"message": str(e), "ok": False}
