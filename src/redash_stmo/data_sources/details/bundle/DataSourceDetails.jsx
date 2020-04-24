@@ -2,12 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { clientConfig } from "@/services/auth";
-import registerComponent from "@/components/DynamicComponent";
+import { registerComponent } from "@/components/DynamicComponent";
 
 
 export default class DataSourceDetails extends React.Component {
   static propTypes = {
-    dataSourceId: PropTypes.number.isRequired,
+    dataSourceId: PropTypes.number,
   }
 
   constructor(props) {
@@ -20,7 +20,9 @@ export default class DataSourceDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.loadURLData();
+    if (this.props.dataSourceId) {
+      this.loadURLData();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -49,10 +51,16 @@ export default class DataSourceDetails extends React.Component {
 
   render() {
     return (
-      <span>
-        {this.state.type_name} {this.state.version && <span>, version: {this.state.version}</span>}
-        {this.state.doc_url && <span>, <a href={this.state.doc_url}>docs</a></span>}
-      </span>
+      <div className="m-t-5">
+        {this.state.type_name &&
+          <span>Data source type: {this.state.doc_url &&
+            <a href={this.state.doc_url}>{this.state.type_name}</a> ||
+            <span>{this.state.type_name}</span>
+          }
+          </span>
+        }
+        {this.state.version && <span>({this.state.version})</span>}
+      </div>
     );
   }
 }
