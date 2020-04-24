@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2020.4.3
+--------
+
+:date: 2020-04-24
+
+* Fix issues with data source details React component.
+
 2020.4.2
 --------
 
