@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2020.5.0
+--------
+
+:date: 2020-05-05
+
+* Remove query text validator since it was broken for a while.
+
 2020.4.3
 --------
 
