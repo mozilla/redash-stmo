@@ -36,7 +36,6 @@ setup(
         "redash.extensions": [
             "datasource_health = redash_stmo.data_sources.health:extension",
             "datasource_details = redash_stmo.data_sources.details.extension:extension",
-            "datasource_validator = redash_stmo.data_sources.validator.extension:extension",
             "dockerflow = redash_stmo.dockerflow:extension",
             "handler_queryresults = redash_stmo.handlers.query_results.extension:extension",
             "handler_remote_user_auth = redash_stmo.handlers.authentication.remote_user_auth:extension",
@@ -56,7 +55,6 @@ setup(
     python_requires='>=3.7, <4',
     install_requires=[
         "dockerflow>=2018.4.0",
-        "pgsanity",
         "pyhive",
         "requests",
         "sqlparse",
