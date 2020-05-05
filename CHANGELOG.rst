@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2020.5.1
+--------
+
+:date: 2020-05-05
+
+* Relax Python requirement to account for old Python 3.5 version on Circle CI.
+
 2020.5.0
 --------
 
