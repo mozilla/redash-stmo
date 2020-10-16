@@ -67,6 +67,6 @@ setup(
             "pytest-cov",
             "pytest-flake8<1.0.1",
         ],
-        "dev": ["watchdog"],
+        "dev": ["watchdog[watchmedo]"],
     },
 )
