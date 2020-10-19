@@ -65,7 +65,7 @@ setup(
             "mock",
             "pytest",
             "pytest-cov",
-            "pytest-flake8<1.0.1",
+            "pytest-flake8>=1.0.5",
         ],
         "dev": ["watchdog[watchmedo]"],
     },
