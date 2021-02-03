@@ -9,7 +9,7 @@ Or as it should have been called: *St. Moredash* ;)
 .. image:: https://circleci.com/gh/mozilla/redash-stmo.svg?style=svg
     :target: https://circleci.com/gh/mozilla/redash-stmo
 
-.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/mozilla/redash-stmo/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/mozilla/redash-stmo
 
 .. image:: https://img.shields.io/badge/calver-YYYY.M.PATCH-22bfda.svg
