@@ -1,4 +1,4 @@
-FROM redash/redash:preview
+FROM mozilla/redash:latest
 
 ENV PATH="/home/redash/.local/bin:$PATH" \
     PYTHONUNBUFFERED=0 \
@@ -7,7 +7,7 @@ ENV PATH="/home/redash/.local/bin:$PATH" \
 USER root
 RUN apt-get update -yq \
     && apt-get install curl gnupg libecpg-dev -yq \
-    && curl -sL https://deb.nodesource.com/setup_10.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash \
     && apt-get install nodejs -yq
 RUN pip uninstall -qy redash-stmo \
     && pip install -U pip virtualenv
