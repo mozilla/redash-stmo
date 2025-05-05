@@ -66,7 +66,14 @@ def check_remote_groups():
             return redirect(index_url)
 
 
+def set_response_headers(response):
+    header_value = extension_settings.COOP_RESPONSE_HEADER
+    response.headers["Cross-Origin-Opener-Policy"] = header_value
+    return response
+
+
 def extension(app):
     """An extension that checks the REMOTE_GROUPS_HEADER."""
     app.before_request(redirect_login)
     app.before_request(check_remote_groups)
+    app.after_request(set_response_headers)
