@@ -22,3 +22,7 @@ REMOTE_GROUPS_HEADER = os.environ.get(
 REMOTE_GROUPS_ALLOWED = set_from_string(
     os.environ.get("REDASH_REMOTE_GROUPS_ALLOWED", "")
 )
+
+COOP_RESPONSE_HEADER = os.environ.get(
+    "REDASH_CROSS_ORIGIN_OPENER_POLICY", "same-origin"
+)
