@@ -62,6 +62,7 @@ setup(
     extras_require={
         "test": [
             "flake8==3.5.0",
+            "importlib-metadata>=1.6,<5.0.0",
             "mock",
             "pytest",
             "pytest-cov",
